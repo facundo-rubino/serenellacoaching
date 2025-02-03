@@ -1472,7 +1472,6 @@ section {
   overflow: hidden;
   background: none !important;
   height: 500px;
-  width: 600px;
 }
 
 .formEncuentro{
@@ -1485,13 +1484,20 @@ section {
     text-decoration: none;
     color: white;
     text-transform: uppercase;
-  font-weight: 500;
-  font-size: 14px;
-  letter-spacing: 1px;
-  display: inline-block;
-  padding: 10px 28px;
-  border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 10px 28px;
+    border-radius: 4px;
   }
+}
+
+@media screen and (max-width: 990px){
+  .formEncuentro{
+    padding-top: 2rem;
+  }
+  
 }
 
 /*--------------------------------------------------------------
