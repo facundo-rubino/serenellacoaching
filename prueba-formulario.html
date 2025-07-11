@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Prueba Formulario Suscripción</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .test-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-success { background: #28a745; }
+        .status-error { background: #dc3545; }
+        .status-loading { background: #ffc107; animation: pulse 1s infinite; }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .alert-custom {
+            border-radius: 10px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="test-card">
+            <div class="text-center mb-4">
+                <h2>🧪 Test del Formulario de Suscripción</h2>
+                <p class="text-muted">Serenella Coaching - Backend Integration Test</p>
+            </div>
+
+            <!-- Estado de conexión -->
+            <div class="alert alert-custom" id="connectionStatus" style="display: none;">
+                <span id="statusIndicator" class="status-indicator status-loading"></span>
+                <span id="statusText">Verificando conexión...</span>
+            </div>
+
+            <!-- Logs de debug -->
+            <div class="mb-3">
+                <button class="btn btn-outline-secondary btn-sm" onclick="toggleLogs()">
+                    🔍 Mostrar/Ocultar Logs
+                </button>
+                <div id="debugLogs" class="mt-2" style="display: none;">
+                    <textarea id="logArea" class="form-control" rows="4" readonly 
+                        placeholder="Los logs de debug aparecerán aquí..."></textarea>
+                </div>
+            </div>
+
+            <!-- Formulario -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">📝 Formulario de Suscripción</h5>
+                    
+                    <form id="testForm" onsubmit="handleSubmit(event)">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label for="name" class="form-label">Nombre completo *</label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       value="María García" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="email" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       value="maria.garcia@test.com" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Celular (opcional)</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" 
+                                       value="+598 99 123 456">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="birthDate" class="form-label">Fecha de nacimiento (opcional)</label>
+                                <input type="date" class="form-control" id="birthDate" name="birthDate" 
+                                       value="1990-05-15">
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary w-100" id="submitBtn">
+                                    <span id="submitText">🚀 Suscribirse</span>
+                                    <span id="submitLoading" style="display: none;">
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                        Enviando...
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Resultado -->
+            <div id="result" class="mt-4" style="display: none;"></div>
+
+            <!-- Instrucciones -->
+            <div class="mt-4 alert alert-info alert-custom">
+                <h6>📋 Instrucciones:</h6>
+                <ol class="mb-0">
+                    <li>Verifica que aparezca "✅ API conectada" arriba</li>
+                    <li>Modifica los datos del formulario si quieres</li>
+                    <li>Presiona "Suscribirse"</li>
+                    <li>Observa el resultado y los logs</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const API_BASE_URL = 'http://localhost:3001/api';
+        
+        function log(message) {
+            console.log(message);
+            const logArea = document.getElementById('logArea');
+            const timestamp = new Date().toLocaleTimeString();
+            logArea.value += `[${timestamp}] ${message}\n`;
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+
+        function toggleLogs() {
+            const logs = document.getElementById('debugLogs');
+            logs.style.display = logs.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function updateStatus(type, message) {
+            const status = document.getElementById('connectionStatus');
+            const indicator = document.getElementById('statusIndicator');
+            const text = document.getElementById('statusText');
+            
+            status.style.display = 'block';
+            indicator.className = `status-indicator status-${type}`;
+            text.textContent = message;
+            
+            if (type === 'success') {
+                status.className = 'alert alert-success alert-custom';
+            } else if (type === 'error') {
+                status.className = 'alert alert-danger alert-custom';
+            } else {
+                status.className = 'alert alert-warning alert-custom';
+            }
+        }
+
+        async function checkAPI() {
+            try {
+                log('🔍 Verificando conexión con API...');
+                updateStatus('loading', 'Verificando conexión con API...');
+                
+                const response = await fetch(`${API_BASE_URL}/health`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log('✅ API conectada correctamente');
+                    updateStatus('success', '✅ API conectada correctamente');
+                    return true;
+                } else {
+                    throw new Error('API respondió con error');
+                }
+            } catch (error) {
+                log(`❌ Error conectando con API: ${error.message}`);
+                updateStatus('error', '❌ Error conectando con API. Verifica que el servidor esté corriendo en puerto 3001');
+                return false;
+            }
+        }
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            const submitLoading = document.getElementById('submitLoading');
+            const resultDiv = document.getElementById('result');
+            
+            // UI de loading
+            submitBtn.disabled = true;
+            submitText.style.display = 'none';
+            submitLoading.style.display = 'inline';
+            
+            try {
+                // Recopilar datos del formulario
+                const formData = new FormData(event.target);
+                const data = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    birthDate: formData.get('birthDate')
+                };
+                
+                log(`📤 Enviando datos: ${JSON.stringify(data, null, 2)}`);
+                
+                // Hacer la petición
+                const response = await fetch(`${API_BASE_URL}/auth/subscribe`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                log(`📥 Respuesta recibida: ${JSON.stringify(result, null, 2)}`);
+                
+                if (response.ok && result.success) {
+                    // Éxito
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-success alert-custom">
+                            <h6>🎉 ¡Suscripción exitosa!</h6>
+                            <p class="mb-1">${result.message}</p>
+                            <small>Usuario creado con ID: ${result.user.id}</small>
+                        </div>
+                    `;
+                    
+                    // Mostrar notificación
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: result.message,
+                        confirmButtonColor: '#667eea'
+                    });
+                    
+                    log('✅ Suscripción completada exitosamente');
+                } else {
+                    throw new Error(result.message || 'Error desconocido');
+                }
+                
+            } catch (error) {
+                log(`❌ Error en la suscripción: ${error.message}`);
+                
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger alert-custom">
+                        <h6>❌ Error en la suscripción</h6>
+                        <p class="mb-0">${error.message}</p>
+                    </div>
+                `;
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message,
+                    confirmButtonColor: '#dc3545'
+                });
+            } finally {
+                // Restaurar UI
+                submitBtn.disabled = false;
+                submitText.style.display = 'inline';
+                submitLoading.style.display = 'none';
+                resultDiv.style.display = 'block';
+            }
+        }
+
+        // Verificar API al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            log('🚀 Página cargada, iniciando verificaciones...');
+            checkAPI();
+        });
+    </script>
+</body>
+</html>
