@@ -1,15 +1,12 @@
 {
-  "name": "mama",
+  "name": "serenellacoaching",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "SerenellaCoaching - Mindfulness y Gestión Emocional",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npx @tailwindcss/cli -i ./src/css/input.css -o ./src/css/output.css --watch",
+    "build": "npx @tailwindcss/cli -i ./src/css/input.css -o ./src/css/output.css --minify"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "sass": "^1.83.0"
+    "@tailwindcss/cli": "^4.1.4"
   }
 }
