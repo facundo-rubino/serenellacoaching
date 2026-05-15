@@ -1,0 +1,73 @@
+@use "../styles/tokens" as *;
+
+.card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  background: $color-surface;
+  box-shadow: $shadow-card;
+}
+
+.imageLink {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: $color-soft;
+
+  img {
+    object-fit: cover;
+    transition: transform 220ms ease;
+  }
+
+  &:hover img {
+    transform: scale(1.035);
+  }
+}
+
+.body {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 22px;
+
+  h3 {
+    color: $color-ink;
+    font-size: 1.15rem;
+  }
+
+  p {
+    color: $color-muted;
+    font-size: 0.95rem;
+  }
+}
+
+.summary {
+  color: $color-teal !important;
+  font-weight: 800;
+}
+
+.meta {
+  width: fit-content;
+  border-radius: 999px;
+  background: $color-lavender;
+  color: $color-ink !important;
+  font-size: 0.82rem !important;
+  font-weight: 800;
+  padding: 4px 10px;
+}
+
+.link {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 40px;
+  align-items: center;
+  color: $color-accent-strong;
+  font-weight: 800;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

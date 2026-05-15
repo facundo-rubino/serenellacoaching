@@ -1,15 +1,29 @@
 {
-  "name": "mama",
+  "name": "serenella-coaching",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "next": "16.2.6",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
   "devDependencies": {
-    "sass": "^1.83.0"
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "16.2.6",
+    "sass": "^1.94.2",
+    "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "postcss": "8.5.14"
   }
 }

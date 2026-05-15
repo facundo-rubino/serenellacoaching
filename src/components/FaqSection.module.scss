@@ -1,0 +1,59 @@
+@use "../styles/tokens" as *;
+
+.section {
+  background: $color-soft;
+  padding-block: 76px;
+}
+
+.inner {
+  @include container;
+}
+
+.list {
+  display: grid;
+  gap: 14px;
+  width: min(100%, 920px);
+  margin-inline: auto;
+}
+
+.item {
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  background: $color-surface;
+  box-shadow: 0 10px 30px rgba($color-ink, 0.06);
+
+  summary {
+    display: flex;
+    min-height: 58px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    color: $color-ink;
+    font-weight: 800;
+    list-style: none;
+    padding: 16px 20px;
+    cursor: pointer;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::after {
+      flex: 0 0 auto;
+      color: $color-accent;
+      content: "+";
+      font-size: 1.4rem;
+      line-height: 1;
+    }
+  }
+
+  &[open] summary::after {
+    content: "-";
+  }
+
+  p {
+    border-top: 1px solid $color-border;
+    color: $color-muted;
+    padding: 0 20px 18px;
+  }
+}

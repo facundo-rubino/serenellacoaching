@@ -1,0 +1,85 @@
+@use "../styles/tokens" as *;
+
+.carousel {
+  display: grid;
+  gap: 24px;
+}
+
+.card {
+  display: grid;
+  min-height: 340px;
+  justify-items: center;
+  align-content: center;
+  border: 1px solid rgba($color-surface, 0.18);
+  border-radius: $radius-md;
+  background: rgba(36, 50, 63, 0.82);
+  color: $color-surface;
+  text-align: center;
+  padding: clamp(28px, 5vw, 54px);
+  box-shadow: $shadow-soft;
+
+  h3 {
+    margin-top: 16px;
+    font-size: 1.25rem;
+  }
+
+  blockquote {
+    max-width: 820px;
+    margin: 16px 0 0;
+    color: rgba($color-surface, 0.9);
+    font-size: clamp(1rem, 2vw, 1.15rem);
+  }
+}
+
+.avatar {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  overflow: hidden;
+  border: 6px solid rgba($color-surface, 0.22);
+  border-radius: 999px;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+
+  > button {
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba($color-surface, 0.5);
+    border-radius: $radius-sm;
+    background: rgba($color-surface, 0.14);
+    color: $color-surface;
+    font-size: 1.8rem;
+    line-height: 1;
+
+    &:hover {
+      background: rgba($color-surface, 0.24);
+    }
+  }
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+
+  button {
+    width: 10px;
+    height: 10px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba($color-surface, 0.42);
+    padding: 0;
+
+    &[aria-current="true"] {
+      background: $color-accent;
+    }
+  }
+}

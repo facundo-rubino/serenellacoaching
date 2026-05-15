@@ -1,0 +1,48 @@
+@use "../styles/tokens" as *;
+
+.heading {
+  margin-bottom: 34px;
+
+  p {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: rgba($color-accent, 0.12);
+    color: $color-accent-strong;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin-top: 12px;
+    color: $color-ink;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+  }
+
+  span {
+    color: $color-accent;
+  }
+}
+
+.center {
+  text-align: center;
+}
+
+.left {
+  text-align: left;
+}
+
+.light {
+  p {
+    background: rgba($color-surface, 0.14);
+    color: #c4f0ea;
+  }
+
+  h2 {
+    color: $color-surface;
+  }
+}

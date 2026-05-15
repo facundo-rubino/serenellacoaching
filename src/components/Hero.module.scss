@@ -1,0 +1,83 @@
+@use "../styles/tokens" as *;
+
+.hero {
+  position: relative;
+  min-height: clamp(520px, 74vh, 760px);
+  isolation: isolate;
+  display: grid;
+  align-items: center;
+  overflow: clip;
+}
+
+.image {
+  z-index: -2;
+  object-fit: cover;
+  object-position: center;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.66) 48%, rgba(255, 255, 255, 0.16)),
+    linear-gradient(180deg, rgba(31, 41, 51, 0.05), rgba(31, 41, 51, 0.18));
+}
+
+.inner {
+  @include container;
+  display: grid;
+  gap: 18px;
+  align-content: center;
+  padding-block: 90px;
+
+  p {
+    color: $color-teal;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 800;
+    letter-spacing: 0;
+  }
+
+  h1 {
+    max-width: 760px;
+    color: $color-ink;
+    font-size: clamp(2.5rem, 8vw, 4.6rem);
+    letter-spacing: 0;
+
+    span {
+      color: $color-accent;
+    }
+  }
+}
+
+.cta {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-sm;
+  background: $color-accent;
+  color: $color-surface;
+  font-weight: 800;
+  padding: 10px 24px;
+  box-shadow: 0 16px 30px rgba($color-accent, 0.22);
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+
+  &:hover {
+    background: $color-accent-strong;
+    transform: translateY(-1px);
+  }
+}
+
+@media (max-width: 720px) {
+  .hero {
+    min-height: 560px;
+  }
+
+  .overlay {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.68));
+  }
+}

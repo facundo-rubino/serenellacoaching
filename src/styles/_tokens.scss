@@ -1,0 +1,24 @@
+$color-ink: #1f2933;
+$color-muted: #5f6c7b;
+$color-soft: #f7f3ef;
+$color-surface: #ffffff;
+$color-accent: #ff7453;
+$color-accent-strong: #e85f40;
+$color-teal: #4b928b;
+$color-lavender: #eee8f7;
+$color-border: #e8e1dc;
+$shadow-soft: 0 20px 55px rgba(31, 41, 51, 0.12);
+$shadow-card: 0 16px 35px rgba(31, 41, 51, 0.1);
+$radius-sm: 6px;
+$radius-md: 8px;
+$container: 1120px;
+
+@mixin container {
+  width: min(100% - 32px, $container);
+  margin-inline: auto;
+}
+
+@mixin focus-ring {
+  outline: 3px solid rgba($color-teal, 0.35);
+  outline-offset: 3px;
+}

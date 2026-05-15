@@ -1,0 +1,66 @@
+import Link from "next/link";
+import { contactInfo, navigation, site } from "@/data/content";
+import styles from "./Footer.module.scss";
+
+export function Footer() {
+  return (
+    <footer className={styles.footer}>
+      <div className={styles.subscribe}>
+        <div>
+          <h2>Formulario de suscripción</h2>
+          <p>¡No te pierdas nada!</p>
+        </div>
+        <form className={styles.form}>
+          <label className="sr-only" htmlFor="newsletter-email">
+            Email
+          </label>
+          <input id="newsletter-email" name="email" type="email" placeholder="tu@email.com" />
+          <button type="submit">Suscribirse</button>
+        </form>
+      </div>
+
+      <div className={styles.inner}>
+        <div className={styles.brand}>
+          <h3>
+            {site.name}
+            <span>.</span>
+          </h3>
+          <p>
+            Parque Posadas
+            <br />
+            Prado, Montevideo
+            <br />
+            Uruguay
+          </p>
+          <p>
+            <strong>Teléfono:</strong> {contactInfo.phone}
+            <br />
+            <strong>Email:</strong> {contactInfo.email}
+          </p>
+        </div>
+
+        <div>
+          <h4>Links</h4>
+          <ul>
+            {navigation.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href}>{item.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h4>¡Seguime en mis redes!</h4>
+          <div className={styles.social}>
+            {contactInfo.socialLinks.map((link) => (
+              <a key={link.href} href={link.href} target="_blank" rel="noreferrer">
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
