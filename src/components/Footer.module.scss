@@ -1,66 +1,84 @@
 @use "../styles/tokens" as *;
 
 .footer {
-  background: #24323f;
-  color: rgba($color-surface, 0.86);
+  background: $color-footer-soft;
+  color: $color-body;
+  font-size: 14px;
+  padding-bottom: 30px;
 }
 
 .subscribe {
   @include container;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 520px);
-  gap: 22px;
-  align-items: center;
-  padding-block: 42px;
-  text-align: left;
+  justify-items: center;
+  gap: 18px;
+  padding-block: 50px;
+  text-align: center;
 
   h2 {
-    color: $color-surface;
-    font-size: 1.35rem;
+    margin: 0 0 20px;
+    color: $color-body;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1;
   }
 
   p {
-    margin-top: 6px;
+    margin: 0;
+    font-size: 15px;
   }
 }
 
 .form {
-  display: flex;
-  min-height: 48px;
+  position: relative;
+  width: min(100%, 540px);
+  margin-top: 12px;
+  border-radius: $radius-sm;
+  background: $color-surface;
+  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.06);
+  padding: 6px 10px;
+  text-align: left;
 
   input {
-    min-width: 0;
-    flex: 1;
+    width: calc(100% - 112px);
     border: 0;
-    border-radius: $radius-sm 0 0 $radius-sm;
-    padding-inline: 16px;
+    padding: 4px 8px;
   }
 
   button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
     border: 0;
     border-radius: 0 $radius-sm $radius-sm 0;
     background: $color-accent;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
     color: $color-surface;
-    font-weight: 700;
-    padding-inline: 18px;
+    font-size: 16px;
+    padding: 0 20px;
+    transition: 0.3s;
+
+    &:hover {
+      background: $color-blue-hover;
+    }
   }
 }
 
 .inner {
   @include container;
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 44px;
-  border-top: 1px solid rgba($color-surface, 0.16);
-  padding-block: 46px;
-
-  h3,
-  h4 {
-    color: $color-surface;
-  }
+  background: $color-surface;
+  padding-block: 60px 30px;
 
   h3 {
-    font-size: 1.55rem;
+    margin: 0 0 15px;
+    color: $color-body;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
 
     span {
       color: $color-accent;
@@ -68,44 +86,90 @@
   }
 
   h4 {
-    margin-bottom: 14px;
-    font-size: 1rem;
+    position: relative;
+    margin: 0 0 12px;
+    color: $color-body;
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 12px;
   }
 
   ul {
-    display: grid;
-    gap: 8px;
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  a:hover {
-    color: $color-surface;
-    text-decoration: underline;
+  li {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+
+    &:first-child {
+      padding-top: 0;
+    }
+  }
+
+  li::before {
+    color: $color-accent;
+    content: "›";
+    font-size: 18px;
+    line-height: 1;
+    padding-right: 6px;
+  }
+
+  a {
+    color: $color-muted;
+    line-height: 1;
+    transition: 0.3s;
+
+    &:hover {
+      color: $color-accent;
+      text-decoration: none;
+    }
   }
 }
 
 .brand {
-  display: grid;
-  gap: 16px;
+  display: block;
+
+  p {
+    color: $color-muted;
+    font-family: var(--font-roboto), sans-serif;
+    font-size: 14px;
+    line-height: 24px;
+    margin-bottom: 14px;
+  }
 }
 
 .social {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 4px;
 
   a {
-    min-height: 38px;
-    border: 1px solid rgba($color-surface, 0.22);
+    display: inline-flex;
+    width: auto;
+    min-width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
     border-radius: $radius-sm;
-    padding: 7px 12px;
+    background: $color-accent;
+    color: $color-surface;
+    font-size: 14px;
+    line-height: 1;
+    padding: 8px;
+    text-align: center;
+
+    &:hover {
+      background: $color-blue-hover;
+      color: $color-surface;
+    }
   }
 }
 
 @media (max-width: 780px) {
-  .subscribe,
   .inner {
     grid-template-columns: 1fr;
   }
@@ -114,10 +178,13 @@
 @media (max-width: 520px) {
   .form {
     display: grid;
+    gap: 8px;
 
     input,
     button {
-      min-height: 48px;
+      position: static;
+      width: 100%;
+      min-height: 44px;
       border-radius: $radius-sm;
     }
   }

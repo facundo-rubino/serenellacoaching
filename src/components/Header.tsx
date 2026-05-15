@@ -1,12 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { contactInfo, navigation, site } from "@/data/content";
 import styles from "./Header.module.scss";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 40);
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <>
@@ -26,7 +35,9 @@ export function Header() {
         </div>
       </section>
 
-      <header className={`${styles.header} ${isOpen ? "nav-open" : ""}`}>
+      <header
+        className={`${styles.header} ${isScrolled ? styles.scrolled : ""} ${isOpen ? "nav-open" : ""}`}
+      >
         <div className={styles.inner}>
           <Link className={styles.logo} href="/">
             {site.name}
@@ -34,7 +45,7 @@ export function Header() {
           </Link>
 
           <button
-            className={styles.menuButton}
+            className={`${styles.menuButton} ${isOpen ? styles.menuOpen : ""}`}
             type="button"
             aria-label={isOpen ? "Cerrar navegación" : "Abrir navegación"}
             aria-controls="main-navigation"
@@ -51,11 +62,18 @@ export function Header() {
             className={`${styles.nav} ${isOpen ? styles.navOpen : ""}`}
             aria-label="Navegación principal"
           >
-            {navigation.map((item) => (
-              <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)}>
-                {item.label}
-              </Link>
-            ))}
+            <div className={styles.navPanel}>
+              {navigation.map((item, index) => (
+                <Link
+                  key={item.href}
+                  className={index === 0 ? styles.active : undefined}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
           </nav>
         </div>
       </header>

@@ -4,22 +4,26 @@
   position: fixed;
   right: 18px;
   bottom: 18px;
-  z-index: 25;
+  z-index: 996;
   display: inline-flex;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   align-items: center;
   justify-content: center;
   border-radius: $radius-sm;
   background: $color-accent;
   color: $color-surface;
-  box-shadow: 0 12px 26px rgba($color-ink, 0.2);
+  box-shadow: none;
   opacity: 0;
   pointer-events: none;
   transform: translateY(8px);
-  transition:
-    opacity 160ms ease,
-    transform 160ms ease;
+  transition: all 0.4s;
+
+  span {
+    color: $color-surface;
+    font-size: 28px;
+    line-height: 0;
+  }
 }
 
 .visible {

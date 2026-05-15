@@ -1,26 +1,28 @@
 @use "../styles/tokens" as *;
 
 .heading {
-  margin-bottom: 34px;
+  margin-bottom: 30px;
+  padding-bottom: 0;
 
   p {
     display: inline-flex;
     align-items: center;
-    min-height: 32px;
-    padding: 5px 14px;
-    border-radius: 999px;
-    background: rgba($color-accent, 0.12);
-    color: $color-accent-strong;
-    font-size: 0.82rem;
+    margin: 0;
+    border-radius: 50px;
+    background: $color-label;
+    color: $color-accent;
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 1px;
+    padding: 8px 20px;
     text-transform: uppercase;
   }
 
   h2 {
-    margin-top: 12px;
+    margin: 15px 0 0;
     color: $color-ink;
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-size: 32px;
+    font-weight: 700;
   }
 
   span {
@@ -38,8 +40,8 @@
 
 .light {
   p {
-    background: rgba($color-surface, 0.14);
-    color: #c4f0ea;
+    background: $color-label;
+    color: $color-accent;
   }
 
   h2 {

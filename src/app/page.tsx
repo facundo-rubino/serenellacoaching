@@ -18,7 +18,7 @@ export default function HomePage() {
         <section id="terapias" className={`${styles.section} ${styles.alt}`}>
           <div className={styles.inner}>
             <SectionHeading eyebrow="Terapias" title="Estas son nuestras" accent="terapias" />
-            <CardGrid items={therapies} />
+            <CardGrid items={therapies} columns={4} />
           </div>
         </section>
 
@@ -34,7 +34,7 @@ export default function HomePage() {
         <section id="cursos" className={`${styles.section} ${styles.alt}`}>
           <div className={styles.inner}>
             <SectionHeading eyebrow="Cursos" title="Nuestros cursos" accent="más actuales" />
-            <CardGrid items={courses} />
+            <CardGrid items={courses} columns={3} />
           </div>
         </section>
 

@@ -1,17 +1,19 @@
-$color-ink: #1f2933;
-$color-muted: #5f6c7b;
-$color-soft: #f7f3ef;
+$color-ink: #222222;
+$color-body: #444444;
+$color-muted: #777777;
+$color-soft: #f6f9fe;
+$color-footer-soft: #f1f6fe;
 $color-surface: #ffffff;
 $color-accent: #ff7453;
-$color-accent-strong: #e85f40;
-$color-teal: #4b928b;
-$color-lavender: #eee8f7;
-$color-border: #e8e1dc;
-$shadow-soft: 0 20px 55px rgba(31, 41, 51, 0.12);
-$shadow-card: 0 16px 35px rgba(31, 41, 51, 0.1);
-$radius-sm: 6px;
-$radius-md: 8px;
-$container: 1120px;
+$color-accent-strong: #ff8466;
+$color-blue-hover: #0d58ba;
+$color-label: #f7f7f7;
+$color-border: #d4e5fc;
+$shadow-soft: 0px 2px 15px rgba(0, 0, 0, 0.1);
+$shadow-card: 0px 2px 15px rgba(16, 110, 234, 0.15);
+$radius-sm: 4px;
+$radius-md: 4px;
+$container: 1140px;
 
 @mixin container {
   width: min(100% - 32px, $container);
@@ -19,6 +21,6 @@ $container: 1120px;
 }
 
 @mixin focus-ring {
-  outline: 3px solid rgba($color-teal, 0.35);
+  outline: 3px solid rgba($color-accent, 0.35);
   outline-offset: 3px;
 }

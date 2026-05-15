@@ -1,10 +1,29 @@
 import type { Metadata } from "next";
+import { Open_Sans, Poppins, Roboto } from "next/font/google";
 import Script from "next/script";
 import { BackToTop } from "@/components/BackToTop";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { site } from "@/data/content";
 import "@/styles/globals.scss";
+
+const openSans = Open_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "600", "700"],
+  variable: "--font-open-sans",
+});
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-roboto",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://serenellacoaching.com"),
@@ -26,7 +45,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body>
+      <body className={`${openSans.variable} ${roboto.variable} ${poppins.variable}`}>
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${site.analyticsId}`}
           strategy="afterInteractive"

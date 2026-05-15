@@ -1,7 +1,8 @@
 @use "../styles/tokens" as *;
 
 .section {
-  padding-block: 76px;
+  padding-block: 60px;
+  overflow: hidden;
 }
 
 .alt {
@@ -15,24 +16,25 @@
 
 .testimonials {
   background:
-    linear-gradient(rgba(36, 50, 63, 0.7), rgba(36, 50, 63, 0.74)),
-    url("/assets/img/testimonials-bg.jpg") center / cover fixed;
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("/assets/img/testimonials-bg.jpg") center center / cover no-repeat;
   color: $color-surface;
+  position: relative;
 }
 
 .testimonialOverlay {
-  padding-block: 82px;
+  padding-block: 80px;
 }
 
 .about {
   background: $color-surface;
-  padding-block: 76px;
+  padding-block: 60px;
 }
 
 .aboutGrid {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: 42px;
+  gap: 24px;
   align-items: center;
 }
 
@@ -40,7 +42,7 @@
   position: relative;
   min-height: 520px;
   overflow: hidden;
-  border-radius: $radius-md;
+  border-radius: 0;
   background: $color-soft;
   box-shadow: $shadow-card;
 
@@ -51,11 +53,12 @@
 
 .aboutCopy {
   display: grid;
-  gap: 16px;
+  gap: 15px;
 
   h3 {
     color: $color-ink;
-    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-size: 26px;
+    font-weight: 600;
   }
 
   p {
@@ -70,8 +73,12 @@
     border-radius: $radius-sm;
     background: $color-accent;
     color: $color-surface;
-    font-weight: 800;
-    padding: 9px 20px;
+    font-family: var(--font-roboto), sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 10px 28px;
+    text-transform: uppercase;
 
     &:hover {
       background: $color-accent-strong;

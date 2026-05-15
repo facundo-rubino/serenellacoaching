@@ -3,8 +3,8 @@
 .card {
   display: grid;
   grid-template-rows: auto 1fr;
+  margin-bottom: 20px;
   overflow: hidden;
-  border: 1px solid $color-border;
   border-radius: $radius-md;
   background: $color-surface;
   box-shadow: $shadow-card;
@@ -19,44 +19,47 @@
 
   img {
     object-fit: cover;
-    transition: transform 220ms ease;
-  }
-
-  &:hover img {
-    transform: scale(1.035);
   }
 }
 
 .body {
   display: grid;
-  gap: 12px;
+  gap: 5px;
   align-content: start;
-  padding: 22px;
+  padding: 25px 15px;
 
   h3 {
     color: $color-ink;
-    font-size: 1.15rem;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 5px;
   }
 
   p {
     color: $color-muted;
-    font-size: 0.95rem;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 26px;
   }
 }
 
 .summary {
-  color: $color-teal !important;
-  font-weight: 800;
+  color: #aaaaaa !important;
+  font-size: 13px !important;
+  font-style: normal !important;
+  font-weight: 400;
+  line-height: 1.4 !important;
 }
 
 .meta {
   width: fit-content;
-  border-radius: 999px;
-  background: $color-lavender;
-  color: $color-ink !important;
-  font-size: 0.82rem !important;
-  font-weight: 800;
-  padding: 4px 10px;
+  background: transparent;
+  color: #aaaaaa !important;
+  font-size: 13px !important;
+  font-style: normal !important;
+  font-weight: 400;
+  line-height: 1.4 !important;
+  padding: 0;
 }
 
 .link {
@@ -64,8 +67,10 @@
   width: fit-content;
   min-height: 40px;
   align-items: center;
-  color: $color-accent-strong;
-  font-weight: 800;
+  color: $color-accent;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
 
   &:hover {
     text-decoration: underline;

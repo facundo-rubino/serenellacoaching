@@ -16,10 +16,10 @@ export function Hero() {
       />
       <div className={styles.overlay} />
       <div className={styles.inner}>
-        <p>Mindfulness - Gestión emocional</p>
         <h1>
           Encontrá tu <span>mejor versión</span>
         </h1>
+        <h2>Mindfulness - Gestión emocional</h2>
         <Link className={styles.cta} href={routes.homeSection("sobre-mi")}>
           Sobre mi
         </Link>

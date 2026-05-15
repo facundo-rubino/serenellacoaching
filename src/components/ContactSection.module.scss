@@ -2,7 +2,7 @@
 
 .section {
   background: $color-surface;
-  padding-block: 76px;
+  padding-block: 60px;
 }
 
 .compact {
@@ -24,16 +24,15 @@
     min-height: 120px;
     align-content: center;
     justify-items: center;
-    border: 1px solid $color-border;
-    border-radius: $radius-md;
     background: $color-surface;
-    box-shadow: 0 12px 28px rgba($color-ink, 0.07);
+    box-shadow: 0 0 30px rgba(214, 215, 216, 0.3);
     text-align: center;
     padding: 20px;
   }
 
   span {
-    color: $color-accent;
+    color: $color-muted;
+    font-size: 20px;
     font-weight: 800;
   }
 
@@ -57,33 +56,30 @@
 }
 
 .map {
-  min-height: 420px;
+  min-height: 500px;
   overflow: hidden;
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
-  background: $color-soft;
+  background: none;
 
   iframe {
     display: block;
     width: 100%;
     height: 100%;
-    min-height: 420px;
+    min-height: 500px;
     border: 0;
   }
 }
 
 .cta {
-  display: grid;
-  align-content: center;
-  gap: 16px;
-  border-radius: $radius-md;
-  background: #24323f;
-  color: rgba($color-surface, 0.88);
-  padding: clamp(28px, 5vw, 46px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  color: $color-body;
+  padding: 0;
 
   h3 {
-    color: $color-surface;
-    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    color: $color-ink;
+    font-size: 26px;
   }
 
   a {
@@ -95,8 +91,11 @@
     border-radius: $radius-sm;
     background: $color-accent;
     color: $color-surface;
-    font-weight: 800;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
     padding: 10px 24px;
+    text-transform: uppercase;
 
     &:hover {
       background: $color-accent-strong;
@@ -105,10 +104,9 @@
 }
 
 .kicker {
-  color: #9fd5cf;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  color: $color-ink;
+  font-size: 26px;
+  font-weight: 600;
 }
 
 @media (max-width: 860px) {
