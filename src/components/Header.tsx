@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
 import { contactInfo, navigation, site } from "@/data/content";
 import styles from "./Header.module.scss";
@@ -63,16 +64,29 @@ export function Header() {
             aria-label="Navegación principal"
           >
             <div className={styles.navPanel}>
-              {navigation.map((item, index) => (
-                <Link
-                  key={item.href}
-                  className={index === 0 ? styles.active : undefined}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              <Link className={styles.mobileBrand} href="/" onClick={() => setIsOpen(false)}>
+                {site.name}
+                <span>.</span>
+              </Link>
+
+              <div className={styles.navLinks}>
+                {navigation.map((item, index) => (
+                  <Link
+                    key={item.href}
+                    className={index === 0 ? styles.active : undefined}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    style={{ "--index": index } as CSSProperties}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+
+              <div className={styles.mobileMeta}>
+                <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+                <a href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}>{contactInfo.phone}</a>
+              </div>
             </div>
           </nav>
         </div>
