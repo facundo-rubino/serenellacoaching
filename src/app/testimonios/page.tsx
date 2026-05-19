@@ -1,20 +1,32 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { SectionHeading } from "@/components/SectionHeading";
-import { testimonials } from "@/data/content";
+import { getPublicContent } from "@/lib/content/public";
 import styles from "./page.module.scss";
 
-export const metadata: Metadata = {
-  title: "Testimonios",
-  description: "Experiencias de personas que trabajaron con SerenellaCoaching.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { pages } = await getPublicContent();
 
-export default function TestimonialsPage() {
+  return {
+    title: pages.testimonials.seoTitle ?? pages.testimonials.title,
+    description: pages.testimonials.seoDescription,
+  };
+}
+
+export default async function TestimonialsPage() {
+  const { pages, testimonials } = await getPublicContent();
+  const hero = pages.testimonials.sections.listing_hero;
+
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
-        <SectionHeading eyebrow="Testimonios" title="Experiencias" accent="reales" align="left" />
-        <p>Historias y devoluciones de personas que transitaron procesos de acompañamiento.</p>
+        <SectionHeading
+          eyebrow={hero?.eyebrow ?? "Testimonios"}
+          title={hero?.title ?? "Experiencias"}
+          accent={hero?.accent ?? "reales"}
+          align="left"
+        />
+        <p>{hero?.body ?? "Historias y devoluciones de personas que transitaron procesos de acompañamiento."}</p>
       </section>
 
       <section className={styles.grid}>

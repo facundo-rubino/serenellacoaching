@@ -1,4 +1,4 @@
-import type { ContentCard as ContentCardType } from "@/data/content";
+import type { ContentCard as ContentCardType } from "@/lib/content/types";
 import { ContentCard } from "./ContentCard";
 import styles from "./CardGrid.module.scss";
 

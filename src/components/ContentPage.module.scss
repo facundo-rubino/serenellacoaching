@@ -92,6 +92,24 @@
   display: grid;
   gap: 14px;
   color: $color-muted;
+
+  h2 {
+    margin-top: 12px;
+    color: $color-ink;
+    font-size: 1.45rem;
+  }
+}
+
+.inlineImage {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+  border-radius: $radius-md;
+  background: $color-soft;
+
+  img {
+    object-fit: cover;
+  }
 }
 
 @media (max-width: 900px) {

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import type { Testimonial } from "@/data/content";
+import type { Testimonial } from "@/lib/content/types";
 import styles from "./TestimonialsCarousel.module.scss";
 
 type TestimonialsCarouselProps = {

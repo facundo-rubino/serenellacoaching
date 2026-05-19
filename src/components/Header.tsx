@@ -3,10 +3,16 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
-import { contactInfo, navigation, site } from "@/data/content";
+import type { ContactInfo, NavigationItem, SiteInfo } from "@/lib/content/types";
 import styles from "./Header.module.scss";
 
-export function Header() {
+type HeaderProps = {
+  contactInfo: ContactInfo;
+  navigation: NavigationItem[];
+  site: SiteInfo;
+};
+
+export function Header({ contactInfo, navigation, site }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 

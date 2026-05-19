@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { Open_Sans, Poppins, Roboto } from "next/font/google";
 import Script from "next/script";
-import { BackToTop } from "@/components/BackToTop";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
-import { site } from "@/data/content";
+import { AppShell } from "@/components/AppShell";
+import { getPublicContent } from "@/lib/content/public";
 import "@/styles/globals.scss";
 
 const openSans = Open_Sans({
@@ -25,43 +23,52 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://serenellacoaching.com"),
-  title: {
-    default: site.title,
-    template: `%s | ${site.name}`,
-  },
-  description: site.description,
-  icons: {
-    icon: "/assets/img/logo.png",
-    shortcut: "/assets/img/favicon.ico",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { site } = await getPublicContent();
 
-export default function RootLayout({
+  return {
+    metadataBase: new URL(site.metadataBase),
+    title: {
+      default: site.title,
+      template: `%s | ${site.name}`,
+    },
+    description: site.description,
+    icons: {
+      icon: site.logoUrl,
+      shortcut: site.faviconUrl,
+    },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { contactInfo, navigation, site } = await getPublicContent();
+
   return (
     <html lang="es">
       <body className={`${openSans.variable} ${roboto.variable} ${poppins.variable}`}>
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${site.analyticsId}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${site.analyticsId}');
-          `}
-        </Script>
-        <Header />
-        {children}
-        <Footer />
-        <BackToTop />
+        {site.analyticsId ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${site.analyticsId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${site.analyticsId}');
+              `}
+            </Script>
+          </>
+        ) : null}
+        <AppShell contactInfo={contactInfo} navigation={navigation} site={site}>
+          {children}
+        </AppShell>
       </body>
     </html>
   );

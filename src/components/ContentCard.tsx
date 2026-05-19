@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { ContentCard as ContentCardType } from "@/data/content";
+import type { ContentCard as ContentCardType } from "@/lib/content/types";
 import styles from "./ContentCard.module.scss";
 
 type ContentCardProps = {

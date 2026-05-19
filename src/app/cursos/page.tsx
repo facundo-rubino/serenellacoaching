@@ -1,19 +1,26 @@
 import type { Metadata } from "next";
 import { ContentListingPage } from "@/components/ContentListingPage";
-import { courses } from "@/data/content";
+import { getPublicContent } from "@/lib/content/public";
 
-export const metadata: Metadata = {
-  title: "Cursos",
-  description: "Cursos de mindfulness y gestión emocional de SerenellaCoaching.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { pages } = await getPublicContent();
 
-export default function CoursesPage() {
+  return {
+    title: pages.courses.seoTitle ?? pages.courses.title,
+    description: pages.courses.seoDescription,
+  };
+}
+
+export default async function CoursesPage() {
+  const { courses, pages } = await getPublicContent();
+  const hero = pages.courses.sections.listing_hero;
+
   return (
     <ContentListingPage
-      eyebrow="Cursos"
-      title="Formaciones"
-      accent="disponibles"
-      intro="Cursos actuales y estructura preparada para ampliar cada formación con programa, fechas y modalidad."
+      eyebrow={hero?.eyebrow ?? "Cursos"}
+      title={hero?.title ?? "Formaciones"}
+      accent={hero?.accent ?? "disponibles"}
+      intro={hero?.body ?? "Cursos actuales y estructura preparada para ampliar cada formación con programa, fechas y modalidad."}
       items={courses}
     />
   );

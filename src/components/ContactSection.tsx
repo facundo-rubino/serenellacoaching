@@ -1,18 +1,19 @@
-import type { ContactInfo } from "@/data/content";
+import type { ContactInfo, PageSection } from "@/lib/content/types";
 import { SectionHeading } from "./SectionHeading";
 import styles from "./ContactSection.module.scss";
 
 type ContactSectionProps = {
   contact: ContactInfo;
   compact?: boolean;
+  heading?: PageSection;
 };
 
-export function ContactSection({ contact, compact = false }: ContactSectionProps) {
+export function ContactSection({ contact, compact = false, heading }: ContactSectionProps) {
   return (
     <section id="contacto" className={`${styles.section} ${compact ? styles.compact : ""}`}>
       <div className={styles.inner}>
         {!compact ? (
-          <SectionHeading eyebrow="Contacto" title="¡Contactame!" align="center" />
+          <SectionHeading eyebrow={heading?.eyebrow ?? "Contacto"} title={heading?.title ?? "¡Contactame!"} align="center" />
         ) : null}
 
         <div className={styles.infoGrid}>

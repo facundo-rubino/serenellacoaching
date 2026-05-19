@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContentDetailPage } from "@/components/ContentDetailPage";
-import { therapies } from "@/data/content";
+import { getContentItem, getPublicContent } from "@/lib/content/public";
 import { routes } from "@/lib/routes";
 
 type TherapyPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const { therapies } = await getPublicContent();
+
   return therapies.map((therapy) => ({ slug: therapy.slug }));
 }
 
 export async function generateMetadata({ params }: TherapyPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const therapy = therapies.find((item) => item.slug === slug);
+  const therapy = await getContentItem("therapy", slug);
 
   if (!therapy) {
     return {};
@@ -30,7 +32,7 @@ export async function generateMetadata({ params }: TherapyPageProps): Promise<Me
 
 export default async function TherapyDetailPage({ params }: TherapyPageProps) {
   const { slug } = await params;
-  const therapy = therapies.find((item) => item.slug === slug);
+  const therapy = await getContentItem("therapy", slug);
 
   if (!therapy) {
     notFound();

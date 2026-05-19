@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ContentCard as ContentCardType } from "@/data/content";
+import type { ContentCard as ContentCardType } from "@/lib/content/types";
 import { routes } from "@/lib/routes";
 import { CardGrid } from "./CardGrid";
 import { SectionHeading } from "./SectionHeading";

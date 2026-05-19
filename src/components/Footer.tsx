@@ -1,8 +1,14 @@
 import Link from "next/link";
-import { contactInfo, navigation, site } from "@/data/content";
+import type { ContactInfo, NavigationItem, SiteInfo } from "@/lib/content/types";
 import styles from "./Footer.module.scss";
 
-export function Footer() {
+type FooterProps = {
+  contactInfo: ContactInfo;
+  navigation: NavigationItem[];
+  site: SiteInfo;
+};
+
+export function Footer({ contactInfo, navigation, site }: FooterProps) {
   return (
     <footer className={styles.footer}>
       <div className={styles.newsletter}>
