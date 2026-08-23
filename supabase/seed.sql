@@ -57,7 +57,7 @@ insert into public.navigation_items (label, href, status, sort_order)
 values
   ('Inicio', '/#inicio', 'published', 1),
   ('Terapias', '/#terapias', 'published', 2),
-  ('Testimonios', '/#testimonios', 'published', 3),
+  ('Reseñas de Google', '/#testimonios', 'published', 3),
   ('Cursos', '/#cursos', 'published', 4),
   ('Sobre mi', '/#sobre-mi', 'published', 5),
   ('Contacto', '/#contacto', 'published', 6);
@@ -77,7 +77,7 @@ values
   ('home', 'Inicio', 'SerenellaCoaching | Mindfulness y gestión emocional', 'Acompañamiento en mindfulness, gestión emocional, terapias energéticas y cursos para encontrar tu mejor versión.', 'published'),
   ('therapies', 'Terapias', 'Terapias', 'Terapias de SerenellaCoaching para mindfulness, energía, coaching y bienestar.', 'published'),
   ('courses', 'Cursos', 'Cursos', 'Cursos de mindfulness y gestión emocional de SerenellaCoaching.', 'published'),
-  ('testimonials', 'Testimonios', 'Testimonios', 'Experiencias de personas que trabajaron con SerenellaCoaching.', 'published'),
+  ('testimonials', 'Reseñas de Google', 'Reseñas de Google', 'Reseñas verificadas en Google de personas que trabajaron con SerenellaCoaching.', 'published'),
   ('about', 'Sobre mi', 'Sobre mi', 'Conocé a Serenella y su recorrido en mindfulness, coaching y gestión emocional.', 'published'),
   ('contact', 'Contacto', 'Contacto', 'Contacto de SerenellaCoaching en Montevideo.', 'published')
 on conflict (slug) do update set
@@ -107,14 +107,14 @@ from (
   values
     ('home', 'hero', null, 'Encontrá tu', 'mejor versión', 'Mindfulness - Gestión emocional', '/assets/img/hero-bg.jpg', '', 'Sobre mi', '/#sobre-mi', '{}', 'published', 1),
     ('home', 'therapies_heading', 'Terapias', 'Estas son nuestras', 'terapias', null, null, null, null, null, '{}', 'published', 2),
-    ('home', 'testimonials_heading', 'Testimonios', 'Experiencias', 'reales', null, null, null, null, null, '{}', 'published', 3),
+    ('home', 'testimonials_heading', 'Reseñas', 'Experiencias', 'en Google', 'Conocé las experiencias compartidas por quienes trabajaron con Serenella.', null, null, 'Ver reseñas de Google', '/testimonios', '{}', 'published', 3),
     ('home', 'courses_heading', 'Cursos', 'Nuestros cursos', 'más actuales', null, null, null, null, null, '{}', 'published', 4),
     ('home', 'about_heading', 'Sobre mi', 'Para que me conozcas', 'un poco más', null, null, null, null, null, '{}', 'published', 5),
     ('home', 'faq_heading', 'F.A.Q', 'Preguntas más', 'frecuentes', null, null, null, null, null, '{}', 'published', 6),
     ('home', 'contact_heading', 'Contacto', '¡Contactame!', null, null, null, null, null, null, '{}', 'published', 7),
     ('therapies', 'listing_hero', 'Terapias', 'Todas las', 'terapias', 'Un punto de partida para ampliar cada propuesta con más detalle cuando el contenido específico esté listo.', null, null, null, null, '{}', 'published', 1),
     ('courses', 'listing_hero', 'Cursos', 'Formaciones', 'disponibles', 'Cursos actuales y estructura preparada para ampliar cada formación con programa, fechas y modalidad.', null, null, null, null, '{}', 'published', 1),
-    ('testimonials', 'listing_hero', 'Testimonios', 'Experiencias', 'reales', 'Historias y devoluciones de personas que transitaron procesos de acompañamiento.', null, null, null, null, '{}', 'published', 1),
+    ('testimonials', 'listing_hero', 'Reseñas verificadas', 'Reseñas de', 'Google', 'Opiniones verificadas de personas que compartieron su experiencia con SerenellaCoaching.', null, null, 'Ver todas / dejar una reseña en Google', null, '{}', 'published', 1),
     ('about', 'main', 'Sobre mi', 'Hola! Me llamo', 'Serenella', $$Soy un ser en continuo auto descubrimiento y expansión. Comencé con prácticas de meditaciones activas y pasivas desde 2004 que cambiaron mi vida, transformándose en un fluir con la existencia, en un hacerse consciente del movimiento y la calma disfrutando de cada estado que transitamos.
 Comencé mi carrera en Alta Performance con el Instructorado en G.R.C (Gimnasia, Respiración y Consciencia) utilizando ejercicios de aeróbica, Pilates, Yoga, Tai Chi y Chi Kung, poniendo vital importancia en los movimientos y cómo el cuerpo responde a la mente y a la emoción. Más tarde, continué con Trascender en la Certificación como Coach Evolutivo, Coach Ontológico y Coach en Programación Neuro-Lingüístico (2010) dando espacio al entendimiento desde la lógica y lo mental.
 En el Centro Superior de Estudios Universitarios LA SALLE me fue otorgado el Título Superior Universitario en Mindfulness y Gestión Emocional (2020), que abrió mi capacidad de entendimiento a la unidad, en la estructura que presenta Jon Kabat Zinn.

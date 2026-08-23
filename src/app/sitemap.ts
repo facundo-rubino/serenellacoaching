@@ -11,7 +11,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     routes.home,
     routes.therapies,
     routes.courses,
-    routes.testimonials,
     routes.about,
     routes.contact,
     ...therapies.map((therapy) => therapy.href),

@@ -41,9 +41,12 @@ const homePage: PageContent = {
       status: "published",
     },
     testimonials_heading: {
-      eyebrow: "Testimonios",
+      eyebrow: "Reseñas",
       title: "Experiencias",
-      accent: "reales",
+      accent: "en Google",
+      body: "Conocé las experiencias compartidas por quienes trabajaron con Serenella.",
+      ctaLabel: "Ver reseñas de Google",
+      ctaHref: routes.testimonials,
       status: "published",
     },
     courses_heading: {
@@ -121,15 +124,16 @@ export const fallbackContent: PublicContent = {
       },
     },
     testimonials: {
-      title: "Testimonios",
-      seoTitle: "Testimonios",
-      seoDescription: "Experiencias de personas que trabajaron con SerenellaCoaching.",
+      title: "Reseñas de Google",
+      seoTitle: "Reseñas de Google",
+      seoDescription: "Reseñas verificadas en Google de personas que trabajaron con SerenellaCoaching.",
       sections: {
         listing_hero: {
-          eyebrow: "Testimonios",
-          title: "Experiencias",
-          accent: "reales",
-          body: "Historias y devoluciones de personas que transitaron procesos de acompañamiento.",
+          eyebrow: "Reseñas verificadas",
+          title: "Reseñas de",
+          accent: "Google",
+          body: "Opiniones verificadas de personas que compartieron su experiencia con SerenellaCoaching.",
+          ctaLabel: "Ver todas / dejar una reseña en Google",
           status: "published",
         },
       },

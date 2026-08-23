@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AdminToaster } from "./AdminToaster";
 
 export const metadata: Metadata = {
   robots: {
@@ -9,5 +10,10 @@ export const metadata: Metadata = {
 };
 
 export default function AdminLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return children;
+  return (
+    <>
+      {children}
+      <AdminToaster />
+    </>
+  );
 }

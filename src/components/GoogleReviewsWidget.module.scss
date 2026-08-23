@@ -1,0 +1,28 @@
+@use "../styles/tokens" as *;
+
+.widgetShell {
+  min-height: 280px;
+  display: grid;
+  align-items: center;
+  background: $color-surface;
+
+  > p {
+    color: $color-muted;
+    text-align: center;
+  }
+}
+
+.widget {
+  min-width: 0;
+  width: 100%;
+}
+
+.widget:not(.ready) {
+  min-height: 1px;
+}
+
+@media (max-width: 620px) {
+  .widgetShell {
+    min-height: 240px;
+  }
+}

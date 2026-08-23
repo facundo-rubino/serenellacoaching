@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import { requireAdmin } from "@/lib/admin/auth";
 import { getAdminDashboardData } from "@/lib/admin/data";
@@ -32,6 +31,8 @@ import type {
   AdminPageSectionRow,
   AdminReviewRow,
 } from "@/lib/admin/types";
+import { AdminActionForm, AdminSubmitButton } from "./AdminActionForm";
+import { AdminDashboardShell } from "./AdminDashboardShell";
 import styles from "./admin.module.scss";
 
 export const dynamic = "force-dynamic";
@@ -54,9 +55,9 @@ function StatusSelect({ value }: { value: "draft" | "published" }) {
 
 function DeleteButton({ label = "Eliminar" }: { label?: string }) {
   return (
-    <button className={styles.dangerButton} type="submit">
+    <AdminSubmitButton className={styles.dangerButton} pendingLabel="Eliminando...">
       {label}
-    </button>
+    </AdminSubmitButton>
   );
 }
 
@@ -64,7 +65,12 @@ function LinkForm({ item, type }: { item?: AdminLinkRow; type: "navigation" | "s
   const action = type === "navigation" ? upsertNavigationItemAction : upsertSocialLinkAction;
 
   return (
-    <form action={action} className={styles.inlineForm}>
+    <AdminActionForm
+      action={action}
+      className={styles.inlineForm}
+      successMessage={item ? `${type === "navigation" ? "Enlace" : "Red social"} actualizado` : `${type === "navigation" ? "Enlace" : "Red social"} creado`}
+      resetOnSuccess={!item}
+    >
       {item ? <input type="hidden" name="id" value={item.id} /> : null}
       <label>
         Etiqueta
@@ -79,14 +85,19 @@ function LinkForm({ item, type }: { item?: AdminLinkRow; type: "navigation" | "s
         <input name="sort_order" type="number" defaultValue={item?.sort_order ?? 0} />
       </label>
       <StatusSelect value={item?.status ?? "draft"} />
-      <button type="submit">Guardar</button>
-    </form>
+      <AdminSubmitButton>Guardar</AdminSubmitButton>
+    </AdminActionForm>
   );
 }
 
 function ContentBlockForm({ block, itemId }: { block?: AdminContentBlockRow; itemId: string }) {
   return (
-    <form action={upsertContentBlockAction} className={styles.inlineForm}>
+    <AdminActionForm
+      action={upsertContentBlockAction}
+      className={styles.inlineForm}
+      successMessage={block ? "Bloque actualizado" : "Bloque creado"}
+      resetOnSuccess={!block}
+    >
       {block ? <input type="hidden" name="id" value={block.id} /> : null}
       <input type="hidden" name="item_id" value={itemId} />
       <label>
@@ -113,8 +124,8 @@ function ContentBlockForm({ block, itemId }: { block?: AdminContentBlockRow; ite
         Orden
         <input name="sort_order" type="number" defaultValue={block?.sort_order ?? 0} />
       </label>
-      <button type="submit">Guardar bloque</button>
-    </form>
+      <AdminSubmitButton>Guardar bloque</AdminSubmitButton>
+    </AdminActionForm>
   );
 }
 
@@ -122,10 +133,15 @@ function ContentItemEditor({ item }: { item: AdminContentItemRow }) {
   return (
     <details className={styles.editorItem}>
       <summary>
-        <span>{item.title}</span>
-        <small>{item.type === "therapy" ? "Terapia" : "Curso"} · {item.status}</small>
+        <span>
+          <strong>{item.title}</strong>
+          <small>{item.type === "therapy" ? "Terapia" : "Curso"}</small>
+        </span>
+        <span className={`${styles.statusBadge} ${item.status === "published" ? styles.statusPublished : styles.statusDraft}`}>
+          {item.status === "published" ? "Publicado" : "Borrador"}
+        </span>
       </summary>
-      <form action={upsertContentItemAction} className={styles.editorForm}>
+      <AdminActionForm action={upsertContentItemAction} className={styles.editorForm} successMessage="Contenido actualizado">
         <input type="hidden" name="id" value={item.id} />
         <label>
           Tipo
@@ -171,21 +187,40 @@ function ContentItemEditor({ item }: { item: AdminContentItemRow }) {
           SEO descripción
           <textarea name="seo_description" rows={2} defaultValue={item.seo_description ?? ""} />
         </label>
-        <button type="submit">Guardar contenido</button>
-      </form>
-      <form action={deleteContentItemAction} className={styles.deleteForm}>
+        <AdminSubmitButton>Guardar contenido</AdminSubmitButton>
+      </AdminActionForm>
+      <AdminActionForm
+        action={deleteContentItemAction}
+        className={styles.deleteForm}
+        successMessage="Contenido eliminado"
+        pendingMessage="Eliminando contenido..."
+        confirmation={{
+          title: `Eliminar “${item.title}”`,
+          description: "Esta acción elimina el contenido y sus bloques asociados. No se puede deshacer.",
+          confirmLabel: "Sí, eliminar contenido",
+        }}
+      >
         <input type="hidden" name="id" value={item.id} />
         <DeleteButton />
-      </form>
+      </AdminActionForm>
       <div className={styles.subsection}>
         <h4>Bloques</h4>
         {item.blocks.map((block) => (
           <div key={block.id} className={styles.blockRow}>
             <ContentBlockForm block={block} itemId={item.id} />
-            <form action={deleteContentBlockAction}>
+            <AdminActionForm
+              action={deleteContentBlockAction}
+              successMessage="Bloque eliminado"
+              pendingMessage="Eliminando bloque..."
+              confirmation={{
+                title: "Eliminar bloque",
+                description: "El bloque dejará de formar parte de este contenido. Esta acción no se puede deshacer.",
+                confirmLabel: "Eliminar bloque",
+              }}
+            >
               <input type="hidden" name="id" value={block.id} />
               <DeleteButton label="Eliminar bloque" />
-            </form>
+            </AdminActionForm>
           </div>
         ))}
         <ContentBlockForm itemId={item.id} />
@@ -196,7 +231,12 @@ function ContentItemEditor({ item }: { item: AdminContentItemRow }) {
 
 function ReviewForm({ item }: { item?: AdminReviewRow }) {
   return (
-    <form action={upsertReviewAction} className={styles.editorForm}>
+    <AdminActionForm
+      action={upsertReviewAction}
+      className={styles.editorForm}
+      successMessage={item ? "Testimonio actualizado" : "Testimonio creado"}
+      resetOnSuccess={!item}
+    >
       {item ? <input type="hidden" name="id" value={item.id} /> : null}
       <label>
         Nombre
@@ -223,14 +263,19 @@ function ReviewForm({ item }: { item?: AdminReviewRow }) {
         Testimonio
         <textarea name="quote" rows={4} defaultValue={item?.quote ?? ""} required />
       </label>
-      <button type="submit">Guardar testimonio</button>
-    </form>
+      <AdminSubmitButton>Guardar testimonio</AdminSubmitButton>
+    </AdminActionForm>
   );
 }
 
 function FaqForm({ item }: { item?: AdminFaqRow }) {
   return (
-    <form action={upsertFaqAction} className={styles.editorForm}>
+    <AdminActionForm
+      action={upsertFaqAction}
+      className={styles.editorForm}
+      successMessage={item ? "Pregunta actualizada" : "Pregunta creada"}
+      resetOnSuccess={!item}
+    >
       {item ? <input type="hidden" name="id" value={item.id} /> : null}
       <label>
         Orden
@@ -245,14 +290,14 @@ function FaqForm({ item }: { item?: AdminFaqRow }) {
         Respuesta
         <textarea name="answer" rows={4} defaultValue={item?.answer ?? ""} required />
       </label>
-      <button type="submit">Guardar FAQ</button>
-    </form>
+      <AdminSubmitButton>Guardar FAQ</AdminSubmitButton>
+    </AdminActionForm>
   );
 }
 
 function PageSectionForm({ section }: { section: AdminPageSectionRow }) {
   return (
-    <form action={upsertPageSectionAction} className={styles.editorForm}>
+    <AdminActionForm action={upsertPageSectionAction} className={styles.editorForm} successMessage="Sección actualizada">
       <input type="hidden" name="id" value={section.id} />
       <label>
         Clave
@@ -295,8 +340,8 @@ function PageSectionForm({ section }: { section: AdminPageSectionRow }) {
         Cuerpo
         <textarea name="body" rows={5} defaultValue={section.body ?? ""} />
       </label>
-      <button type="submit">Guardar sección</button>
-    </form>
+      <AdminSubmitButton>Guardar sección</AdminSubmitButton>
+    </AdminActionForm>
   );
 }
 
@@ -305,7 +350,7 @@ function MediaAssetForm({ asset }: { asset: AdminMediaAssetRow }) {
     <article className={styles.mediaCard}>
       <Image src={asset.public_url} alt={asset.alt} width={360} height={270} unoptimized />
       <code>{asset.public_url}</code>
-      <form action={updateMediaAssetAction} className={styles.inlineForm}>
+      <AdminActionForm action={updateMediaAssetAction} className={styles.inlineForm} successMessage="Imagen actualizada">
         <input type="hidden" name="id" value={asset.id} />
         <label>
           Título
@@ -316,60 +361,90 @@ function MediaAssetForm({ asset }: { asset: AdminMediaAssetRow }) {
           <input name="alt" defaultValue={asset.alt} />
         </label>
         <StatusSelect value={asset.status} />
-        <button type="submit">Guardar</button>
-      </form>
-      <form action={deleteMediaAssetAction}>
+        <AdminSubmitButton>Guardar</AdminSubmitButton>
+      </AdminActionForm>
+      <AdminActionForm
+        action={deleteMediaAssetAction}
+        successMessage="Imagen eliminada"
+        pendingMessage="Eliminando imagen..."
+        confirmation={{
+          title: "Eliminar imagen",
+          description: "Se eliminará el archivo de la biblioteca. Verificá que no esté siendo utilizado antes de continuar.",
+          confirmLabel: "Eliminar imagen",
+        }}
+      >
         <input type="hidden" name="id" value={asset.id} />
         <input type="hidden" name="path" value={asset.path} />
         <DeleteButton />
-      </form>
+      </AdminActionForm>
     </article>
+  );
+}
+
+function PanelSummary({ title, description }: { title: string; description: string }) {
+  return (
+    <summary>
+      <span>
+        <strong>{title}</strong>
+        <small>{description}</small>
+      </span>
+      <span className={styles.summaryChevron} aria-hidden="true">⌄</span>
+    </summary>
   );
 }
 
 export default async function AdminDashboardPage() {
   const { profile, supabase } = await requireAdmin();
   const data = await getAdminDashboardData(supabase);
+  const publishedContent = data.contentItems.filter((item) => item.status === "published").length;
+  const publishedReviews = data.reviews.filter((item) => item.status === "published").length;
+  const publishedFaqs = data.faqItems.filter((item) => item.status === "published").length;
+  const publishedMedia = data.mediaAssets.filter((item) => item.status === "published").length;
 
   return (
-    <main className={styles.adminPage}>
-      <header className={styles.adminHeader}>
+    <AdminDashboardShell
+      email={profile.email}
+      displayName={profile.display_name}
+      signOutAction={signOutAdminAction}
+    >
+      <section id="resumen" className={styles.dashboardOverview}>
+        <header className={styles.adminHeader}>
         <div>
-          <p className={styles.kicker}>Dashboard</p>
-          <h1>Contenido SerenellaCoaching</h1>
-          <p>{profile.email}</p>
+          <p className={styles.kicker}>Panel de control</p>
+          <h1>Hola{profile.display_name ? `, ${profile.display_name.split(" ")[0]}` : ""}</h1>
+          <p>Gestioná el contenido, la publicación y la configuración del sitio desde un solo lugar.</p>
         </div>
-        <div className={styles.headerActions}>
-          <Link href="/">Ver sitio</Link>
-          <form action={signOutAdminAction}>
-            <button type="submit">Salir</button>
-          </form>
-        </div>
-      </header>
+        <span className={styles.systemStatus}><i /> Sitio operativo</span>
+        </header>
 
-      <section className={styles.metrics}>
+        <div className={styles.metrics}>
         <article>
           <strong>{data.contentItems.length}</strong>
           <span>Cursos y terapias</span>
+          <small>{publishedContent} publicados · {data.contentItems.length - publishedContent} borradores</small>
         </article>
         <article>
           <strong>{data.reviews.length}</strong>
           <span>Testimonios</span>
+          <small>{publishedReviews} publicados</small>
         </article>
         <article>
           <strong>{data.faqItems.length}</strong>
           <span>FAQs</span>
+          <small>{publishedFaqs} publicadas</small>
         </article>
         <article>
           <strong>{data.mediaAssets.length}</strong>
           <span>Imágenes recientes</span>
+          <small>{publishedMedia} publicadas</small>
         </article>
+        </div>
       </section>
 
-      <details className={styles.panel} open>
-        <summary>Configuración del sitio</summary>
+      <details id="sitio" className={styles.panel} open>
+        <PanelSummary title="Configuración del sitio" description="Identidad general, SEO y medición" />
         {data.site ? (
-          <form action={updateSiteSettingsAction} className={styles.editorForm}>
+          <AdminActionForm action={updateSiteSettingsAction} className={styles.editorForm} successMessage="Configuración actualizada">
             <label>
               Nombre
               <input name="name" defaultValue={data.site.name} required />
@@ -398,15 +473,15 @@ export default async function AdminDashboardPage() {
               Favicon
               <input name="favicon_url" defaultValue={data.site.favicon_url} required />
             </label>
-            <button type="submit">Guardar configuración</button>
-          </form>
+            <AdminSubmitButton>Guardar configuración</AdminSubmitButton>
+          </AdminActionForm>
         ) : null}
       </details>
 
-      <details className={styles.panel}>
-        <summary>Contacto, navegación y redes</summary>
+      <details id="contacto-admin" className={styles.panel}>
+        <PanelSummary title="Contacto, navegación y redes" description="Datos públicos y enlaces principales" />
         {data.contact ? (
-          <form action={updateContactSettingsAction} className={styles.editorForm}>
+          <AdminActionForm action={updateContactSettingsAction} className={styles.editorForm} successMessage="Datos de contacto actualizados">
             <label>
               Email
               <input name="email" type="email" defaultValue={data.contact.email} required />
@@ -427,8 +502,8 @@ export default async function AdminDashboardPage() {
               Formulario
               <input name="form_url" defaultValue={data.contact.form_url} required />
             </label>
-            <button type="submit">Guardar contacto</button>
-          </form>
+            <AdminSubmitButton>Guardar contacto</AdminSubmitButton>
+          </AdminActionForm>
         ) : null}
         <div className={styles.columns}>
           <div>
@@ -436,10 +511,18 @@ export default async function AdminDashboardPage() {
             {data.navigation.map((item) => (
               <div key={item.id} className={styles.rowGroup}>
                 <LinkForm item={item} type="navigation" />
-                <form action={deleteNavigationItemAction}>
+                <AdminActionForm
+                  action={deleteNavigationItemAction}
+                  successMessage="Enlace eliminado"
+                  pendingMessage="Eliminando enlace..."
+                  confirmation={{
+                    title: `Eliminar “${item.label}”`,
+                    description: "El enlace desaparecerá de la navegación pública. Esta acción no se puede deshacer.",
+                  }}
+                >
                   <input type="hidden" name="id" value={item.id} />
                   <DeleteButton />
-                </form>
+                </AdminActionForm>
               </div>
             ))}
             <LinkForm type="navigation" />
@@ -449,10 +532,18 @@ export default async function AdminDashboardPage() {
             {data.socialLinks.map((item) => (
               <div key={item.id} className={styles.rowGroup}>
                 <LinkForm item={item} type="social" />
-                <form action={deleteSocialLinkAction}>
+                <AdminActionForm
+                  action={deleteSocialLinkAction}
+                  successMessage="Red social eliminada"
+                  pendingMessage="Eliminando red social..."
+                  confirmation={{
+                    title: `Eliminar “${item.label}”`,
+                    description: "El enlace dejará de mostrarse en el sitio. Esta acción no se puede deshacer.",
+                  }}
+                >
                   <input type="hidden" name="id" value={item.id} />
                   <DeleteButton />
-                </form>
+                </AdminActionForm>
               </div>
             ))}
             <LinkForm type="social" />
@@ -460,9 +551,15 @@ export default async function AdminDashboardPage() {
         </div>
       </details>
 
-      <details className={styles.panel} open>
-        <summary>Contenido</summary>
-        <form action={upsertContentItemAction} className={styles.editorForm}>
+      <details id="contenido-admin" className={styles.panel} open>
+        <PanelSummary title="Cursos y terapias" description="Creá, editá y definí qué contenido está publicado" />
+        <div className={styles.creationHeader}>
+          <div>
+            <h2>Crear contenido</h2>
+            <p>Completá los datos principales. Podrás agregar bloques después de crearlo.</p>
+          </div>
+        </div>
+        <AdminActionForm action={upsertContentItemAction} className={styles.editorForm} successMessage="Contenido creado" resetOnSuccess>
           <label>
             Tipo
             <select name="type" defaultValue="therapy">
@@ -507,43 +604,63 @@ export default async function AdminDashboardPage() {
             SEO descripción
             <textarea name="seo_description" rows={2} />
           </label>
-          <button type="submit">Crear contenido</button>
-        </form>
+          <AdminSubmitButton>Crear contenido</AdminSubmitButton>
+        </AdminActionForm>
+        <div className={styles.contentListHeader}>
+          <h2>Contenido existente</h2>
+          <span>{data.contentItems.length} elementos</span>
+        </div>
         {data.contentItems.map((item) => (
           <ContentItemEditor key={item.id} item={item} />
         ))}
       </details>
 
-      <details className={styles.panel}>
-        <summary>Testimonios</summary>
+      <details id="testimonios-admin" className={styles.panel}>
+        <PanelSummary title="Testimonios" description="Experiencias visibles en la portada y la sección dedicada" />
         <ReviewForm />
         {data.reviews.map((item) => (
           <div key={item.id} className={styles.rowGroup}>
             <ReviewForm item={item} />
-            <form action={deleteReviewAction}>
+            <AdminActionForm
+              action={deleteReviewAction}
+              successMessage="Testimonio eliminado"
+              pendingMessage="Eliminando testimonio..."
+              confirmation={{
+                title: `Eliminar testimonio de ${item.reviewer_name}`,
+                description: "El testimonio dejará de mostrarse en el sitio. Esta acción no se puede deshacer.",
+              }}
+            >
               <input type="hidden" name="id" value={item.id} />
               <DeleteButton />
-            </form>
+            </AdminActionForm>
           </div>
         ))}
       </details>
 
-      <details className={styles.panel}>
-        <summary>FAQ</summary>
+      <details id="faq-admin" className={styles.panel}>
+        <PanelSummary title="Preguntas frecuentes" description="Respuestas publicadas en la portada" />
         <FaqForm />
         {data.faqItems.map((item) => (
           <div key={item.id} className={styles.rowGroup}>
             <FaqForm item={item} />
-            <form action={deleteFaqAction}>
+            <AdminActionForm
+              action={deleteFaqAction}
+              successMessage="Pregunta eliminada"
+              pendingMessage="Eliminando pregunta..."
+              confirmation={{
+                title: "Eliminar pregunta frecuente",
+                description: `Se eliminará “${item.question}”. Esta acción no se puede deshacer.`,
+              }}
+            >
               <input type="hidden" name="id" value={item.id} />
               <DeleteButton />
-            </form>
+            </AdminActionForm>
           </div>
         ))}
       </details>
 
-      <details className={styles.panel}>
-        <summary>Páginas y secciones</summary>
+      <details id="paginas-admin" className={styles.panel}>
+        <PanelSummary title="Páginas y secciones" description="Textos, imágenes y llamadas a la acción por página" />
         {data.pages.map((page) => (
           <section key={page.id} className={styles.subsection}>
             <h3>{page.title}</h3>
@@ -554,9 +671,15 @@ export default async function AdminDashboardPage() {
         ))}
       </details>
 
-      <details className={styles.panel}>
-        <summary>Media</summary>
-        <form action={uploadMediaAction} className={styles.editorForm}>
+      <details id="media-admin" className={styles.panel}>
+        <PanelSummary title="Biblioteca multimedia" description="Subí y administrá imágenes del sitio" />
+        <AdminActionForm
+          action={uploadMediaAction}
+          className={styles.editorForm}
+          successMessage="Imagen subida"
+          pendingMessage="Subiendo imagen..."
+          resetOnSuccess
+        >
           <label>
             Imagen
             <input name="file" type="file" accept="image/*" required />
@@ -570,14 +693,14 @@ export default async function AdminDashboardPage() {
             <input name="alt" />
           </label>
           <StatusSelect value="published" />
-          <button type="submit">Subir imagen</button>
-        </form>
+          <AdminSubmitButton pendingLabel="Subiendo...">Subir imagen</AdminSubmitButton>
+        </AdminActionForm>
         <div className={styles.mediaGrid}>
           {data.mediaAssets.map((asset) => (
             <MediaAssetForm key={asset.id} asset={asset} />
           ))}
         </div>
       </details>
-    </main>
+    </AdminDashboardShell>
   );
 }

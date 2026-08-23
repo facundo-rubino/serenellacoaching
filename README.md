@@ -55,13 +55,26 @@ Las imágenes públicas viven en `public/assets/img`.
 
 El panel rechaza sesiones administrativas que no provengan de Google, aunque el usuario tenga rol `admin`.
 
+## Reseñas de Google
+
+La home muestra una única instancia del widget gratuito de EmbedSocial. El botón del bloque y la ruta heredada `/testimonios` redirigen al perfil público de Google, por lo que no se carga un segundo widget.
+
+1. Crear un widget gratuito en [EmbedSocial](https://embedsocial.com/free-google-reviews-widget/) y conectar la cuenta que administra el perfil comercial de Google.
+2. Configurarlo en español como carrusel, con lazy loading y la opción para SPA/Ajax habilitada.
+3. Copiar únicamente el valor `data-ref` del código JavaScript generado para el widget AI (`embedsocial-hashtag`) y configurar:
+   - `NEXT_PUBLIC_EMBEDSOCIAL_WIDGET_REF`
+   - `NEXT_PUBLIC_GOOGLE_REVIEWS_URL` con el enlace HTTPS al perfil público de Google.
+4. Agregar ambas variables en local, Preview y Production de Vercel.
+
+El plan gratuito informado por EmbedSocial admite 500 visualizaciones mensuales. Como el widget está en la home, conviene controlar ese consumo durante el primer mes. Los testimonios manuales permanecen en Supabase y en `/admin` como respaldo, pero no se muestran públicamente. Si el widget no está configurado o su script falla, la home conserva el mensaje y el enlace directo a Google cuando esté configurado.
+
 ## Deploy en Vercel
 
 El repo queda preparado para Vercel con `vercel.json`, headers básicos de seguridad y `/api/health` para smoke tests.
 
 Para migrar desde Hostinger sin cortar producción:
 
-1. Importar el repositorio en Vercel y configurar las variables de entorno de `.env.example`.
+1. Importar el repositorio en Vercel y configurar todas las variables obligatorias de `.env.example`.
 2. Ejecutar `npm run release:check` con las mismas variables que tendrá producción.
 3. Deployar a preview y validar:
    - `/`

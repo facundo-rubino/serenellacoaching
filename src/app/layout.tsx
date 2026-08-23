@@ -4,6 +4,7 @@ import Script from "next/script";
 import { AppShell } from "@/components/AppShell";
 import { getPublicContent } from "@/lib/content/public";
 import "@/styles/globals.scss";
+import { Analytics } from "@vercel/analytics/next"
 
 const openSans = Open_Sans({
   subsets: ["latin"],

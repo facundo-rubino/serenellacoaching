@@ -46,7 +46,7 @@ export const site = {
 export const navigation = [
   { label: "Inicio", href: routes.homeSection("inicio") },
   { label: "Terapias", href: routes.homeSection("terapias") },
-  { label: "Testimonios", href: routes.homeSection("testimonios") },
+  { label: "Reseñas de Google", href: routes.homeSection("testimonios") },
   { label: "Cursos", href: routes.homeSection("cursos") },
   { label: "Sobre mi", href: routes.homeSection("sobre-mi") },
   { label: "Contacto", href: routes.homeSection("contacto") },

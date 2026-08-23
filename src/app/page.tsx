@@ -3,16 +3,18 @@ import Link from "next/link";
 import { CardGrid } from "@/components/CardGrid";
 import { ContactSection } from "@/components/ContactSection";
 import { FaqSection } from "@/components/FaqSection";
+import { GoogleReviewsWidget } from "@/components/GoogleReviewsWidget";
 import { Hero } from "@/components/Hero";
 import { SectionHeading } from "@/components/SectionHeading";
-import { TestimonialsCarousel } from "@/components/TestimonialsCarousel";
 import { getPublicContent } from "@/lib/content/public";
 import { routes } from "@/lib/routes";
 import styles from "./page.module.scss";
 
 export default async function HomePage() {
-  const { about, contactInfo, courses, faqItems, pages, testimonials, therapies } = await getPublicContent();
+  const { about, contactInfo, courses, faqItems, pages, therapies } = await getPublicContent();
   const home = pages.home.sections;
+  const widgetRef = process.env.NEXT_PUBLIC_EMBEDSOCIAL_WIDGET_REF?.trim();
+  const googleReviewsUrl = process.env.NEXT_PUBLIC_GOOGLE_REVIEWS_URL?.trim();
 
   return (
     <main id="main-content">
@@ -32,12 +34,28 @@ export default async function HomePage() {
           <div className={styles.testimonialOverlay}>
             <div className={styles.inner}>
               <SectionHeading
-                eyebrow={home.testimonials_heading?.eyebrow ?? "Testimonios"}
+                eyebrow={home.testimonials_heading?.eyebrow ?? "Reseñas"}
                 title={home.testimonials_heading?.title ?? "Experiencias"}
-                accent={home.testimonials_heading?.accent ?? "reales"}
-                tone="light"
+                accent={home.testimonials_heading?.accent ?? "en Google"}
               />
-              <TestimonialsCarousel items={testimonials} />
+              <div className={styles.testimonialCta}>
+                <p>
+                  {home.testimonials_heading?.body ??
+                    "Conocé las experiencias compartidas por quienes trabajaron con Serenella."}
+                </p>
+                <div className={styles.testimonialWidget}>
+                  <GoogleReviewsWidget widgetRef={widgetRef} />
+                </div>
+                {googleReviewsUrl ? (
+                  <a href={googleReviewsUrl} target="_blank" rel="noreferrer">
+                    {home.testimonials_heading?.ctaLabel ?? "Ver reseñas de Google"}
+                  </a>
+                ) : (
+                  <Link href={home.testimonials_heading?.ctaHref ?? routes.testimonials}>
+                    {home.testimonials_heading?.ctaLabel ?? "Ver reseñas de Google"}
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
       </section>
