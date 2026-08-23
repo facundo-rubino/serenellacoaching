@@ -34,42 +34,22 @@
 }
 
 .form {
-  position: relative;
+  display: inline-flex;
+  width: fit-content;
   min-height: 48px;
+  align-items: center;
+  justify-content: center;
   border-radius: $radius-sm;
-  background: $color-surface;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.06);
-  padding: 6px 142px 6px 10px;
+  background: $color-accent;
+  box-shadow: $shadow-soft;
+  color: $color-surface;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 22px;
+  transition: 0.3s;
 
-  input {
-    width: 100%;
-    min-height: 36px;
-    border: 0;
-    color: $color-body;
-    padding: 4px 8px;
-
-    &::placeholder {
-      color: #aaaaaa;
-    }
-  }
-
-  button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    border: 0;
-    border-radius: 0 $radius-sm $radius-sm 0;
-    background: $color-accent;
-    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
-    color: $color-surface;
-    font-size: 16px;
-    padding: 0 20px;
-    transition: 0.3s;
-
-    &:hover {
-      background: $color-blue-hover;
-    }
+  &:hover {
+    background: $color-blue-hover;
   }
 }
 
@@ -227,16 +207,7 @@
   }
 
   .form {
-    display: grid;
-    gap: 10px;
-    padding: 10px;
-
-    input,
-    button {
-      position: static;
-      width: 100%;
-      min-height: 44px;
-      border-radius: $radius-sm;
-    }
+    width: 100%;
+    min-height: 44px;
   }
 }

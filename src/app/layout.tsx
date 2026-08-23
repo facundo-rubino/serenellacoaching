@@ -34,8 +34,23 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: site.description,
     icons: {
-      icon: site.logoUrl,
+      icon: site.faviconUrl,
       shortcut: site.faviconUrl,
+      apple: site.logoUrl,
+    },
+    openGraph: {
+      type: "website",
+      locale: "es_UY",
+      siteName: site.name,
+      title: site.title,
+      description: site.description,
+      images: [{ url: "/assets/img/hero-bg.jpg", alt: site.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: site.title,
+      description: site.description,
+      images: ["/assets/img/hero-bg.jpg"],
     },
   };
 }
@@ -46,14 +61,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const { contactInfo, navigation, site } = await getPublicContent();
+  const analyticsId = site.analyticsId && /^G-[A-Z0-9]+$/.test(site.analyticsId) ? site.analyticsId : undefined;
 
   return (
     <html lang="es">
       <body className={`${openSans.variable} ${roboto.variable} ${poppins.variable}`}>
-        {site.analyticsId ? (
+        {analyticsId ? (
           <>
             <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${site.analyticsId}`}
+              src={`https://www.googletagmanager.com/gtag/js?id=${analyticsId}`}
               strategy="afterInteractive"
             />
             <Script id="google-analytics" strategy="afterInteractive">
@@ -61,7 +77,7 @@ export default async function RootLayout({
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', '${site.analyticsId}');
+                gtag('config', ${JSON.stringify(analyticsId)});
               `}
             </Script>
           </>

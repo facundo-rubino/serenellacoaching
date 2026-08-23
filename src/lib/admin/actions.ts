@@ -21,6 +21,12 @@ export type MfaEnrollState = ActionState & {
 const statusSchema = z.enum(["draft", "published"]);
 const contentTypeSchema = z.enum(["therapy", "course"]);
 const blockTypeSchema = z.enum(["paragraph", "heading", "image"]);
+const webUrlSchema = z.string().url().refine((value) => /^https?:\/\//.test(value), "La URL debe usar HTTP o HTTPS.");
+const internalOrWebUrlSchema = z.string().min(1).refine(
+  (value) => value.startsWith("/") || webUrlSchema.safeParse(value).success,
+  "Ingresá una ruta interna o una URL HTTP/HTTPS.",
+);
+const analyticsIdSchema = z.string().regex(/^G-[A-Z0-9]+$/).nullable();
 
 function formString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -204,10 +210,10 @@ export async function updateSiteSettingsAction(formData: FormData) {
       name: z.string().min(1),
       title: z.string().min(1),
       description: z.string().min(1),
-      analytics_id: z.string().nullable(),
-      metadata_base: z.string().url(),
-      logo_url: z.string().min(1),
-      favicon_url: z.string().min(1),
+      analytics_id: analyticsIdSchema,
+      metadata_base: webUrlSchema,
+      logo_url: internalOrWebUrlSchema,
+      favicon_url: internalOrWebUrlSchema,
     })
     .parse({
       id: true,
@@ -233,8 +239,8 @@ export async function updateContactSettingsAction(formData: FormData) {
       email: z.string().email(),
       phone: z.string().min(1),
       address: z.string().min(1),
-      map_embed_url: z.string().url(),
-      form_url: z.string().url(),
+      map_embed_url: webUrlSchema,
+      form_url: webUrlSchema,
     })
     .parse({
       id: true,
@@ -255,7 +261,7 @@ export async function upsertNavigationItemAction(formData: FormData) {
   const id = optionalUuid(formData);
   const payload = {
     label: z.string().min(1).parse(formString(formData, "label")),
-    href: z.string().min(1).parse(formString(formData, "href")),
+    href: internalOrWebUrlSchema.parse(formString(formData, "href")),
     status: statusSchema.parse(formString(formData, "status") || "draft"),
     sort_order: formInteger(formData, "sort_order"),
   };
@@ -278,7 +284,7 @@ export async function upsertSocialLinkAction(formData: FormData) {
   const id = optionalUuid(formData);
   const payload = {
     label: z.string().min(1).parse(formString(formData, "label")),
-    href: z.string().url().parse(formString(formData, "href")),
+    href: webUrlSchema.parse(formString(formData, "href")),
     status: statusSchema.parse(formString(formData, "status") || "draft"),
     sort_order: formInteger(formData, "sort_order"),
   };
@@ -430,8 +436,14 @@ export async function uploadMediaAction(formData: FormData) {
     throw new Error("Seleccioná una imagen.");
   }
 
-  if (!file.type.startsWith("image/")) {
-    throw new Error("Solo se permiten imágenes.");
+  const allowedImageTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"]);
+
+  if (!allowedImageTypes.has(file.type)) {
+    throw new Error("El formato de imagen no está permitido.");
+  }
+
+  if (file.size > 10 * 1024 * 1024) {
+    throw new Error("La imagen no puede superar los 10 MB.");
   }
 
   const title = nullableFormString(formData, "title") ?? file.name;

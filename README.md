@@ -9,6 +9,9 @@ Sitio migrado a Next.js, React, TypeScript y SCSS nativo.
 - `npm run start`: servir el build de producción.
 - `npm run lint`: validación ESLint.
 - `npm run typecheck`: validación TypeScript.
+- `npm run check`: lint y TypeScript.
+- `npm run env:check`: valida las variables obligatorias de producción.
+- `npm run release:check`: validación completa previa a un release (entorno, lint, tipos y build).
 
 ## Arquitectura
 
@@ -51,15 +54,21 @@ El repo queda preparado para Vercel con `vercel.json`, headers básicos de segur
 Para migrar desde Hostinger sin cortar producción:
 
 1. Importar el repositorio en Vercel y configurar las variables de entorno de `.env.example`.
-2. Deployar a preview y validar:
+2. Ejecutar `npm run release:check` con las mismas variables que tendrá producción.
+3. Deployar a preview y validar:
    - `/`
    - `/admin/login`
    - `/api/health`
-3. Agregar `serenellacoaching.com` y `www.serenellacoaching.com` al proyecto de Vercel.
-4. Mantener Hostinger como producción hasta que el preview de Vercel esté validado.
-5. Cambiar DNS en Hostinger cuando esté todo listo:
+   - `/robots.txt`
+   - `/sitemap.xml`
+4. Confirmar que `/api/health` responde HTTP 200 y `checks.database: "ok"`.
+5. Agregar `serenellacoaching.com` y `www.serenellacoaching.com` al proyecto de Vercel.
+6. Mantener Hostinger como producción hasta que el preview de Vercel esté validado.
+7. Cambiar DNS en Hostinger cuando esté todo listo:
    - dominio raíz/apex: `A` hacia `76.76.21.21`
    - `www`: `CNAME` hacia el destino que indique Vercel en el dashboard
-6. Verificar SSL y navegación pública antes de apagar el hosting anterior.
+8. Verificar SSL, navegación pública, formulario de contacto, login y MFA antes de apagar el hosting anterior.
 
 Nota: Vercel Hobby es para uso personal/no comercial. Para un sitio comercial o con pagos PayPal, planificar Vercel Pro o elegir un hosting que permita uso comercial en free tier.
+
+La lista operativa completa para el lanzamiento y rollback está en [`RELEASE.md`](./RELEASE.md).

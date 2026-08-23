@@ -14,16 +14,12 @@ export function Footer({ contactInfo, navigation, site }: FooterProps) {
       <div className={styles.newsletter}>
         <div className={styles.subscribe}>
           <div>
-            <h2>Formulario de suscripción</h2>
-            <p>¡No te pierdas nada!</p>
+            <h2>Recibí novedades</h2>
+            <p>Dejanos tus datos para enterarte de próximos cursos y actividades.</p>
           </div>
-          <form className={styles.form}>
-            <label className="sr-only" htmlFor="newsletter-email">
-              Email
-            </label>
-            <input id="newsletter-email" name="email" type="email" placeholder="tu@email.com" />
-            <button type="submit">Suscribirse</button>
-          </form>
+          <a className={styles.form} href={contactInfo.formUrl} target="_blank" rel="noreferrer">
+            Quiero recibir novedades
+          </a>
         </div>
       </div>
 
