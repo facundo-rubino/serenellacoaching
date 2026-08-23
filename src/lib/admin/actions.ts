@@ -126,9 +126,12 @@ export async function startMfaEnrollmentAction(state: MfaEnrollState, formData: 
     return { error: error.message };
   }
 
+  const svg = data.totp.qr_code.replace(/^data:image\/svg\+xml(?:;utf-8)?,/, "");
+  const qrCode = `data:image/svg+xml;base64,${Buffer.from(svg, "utf8").toString("base64")}`;
+
   return {
     factorId: data.id,
-    qrCode: `data:image/svg+xml;utf-8,${encodeURIComponent(data.totp.qr_code)}`,
+    qrCode,
     secret: data.totp.secret,
     message: "Escaneá el QR y verificá el código para activar MFA.",
   };

@@ -16,7 +16,7 @@ export default async function MfaEnrollPage() {
       <section className={styles.authCard}>
         <p className={styles.kicker}>Seguridad</p>
         <h1>Activá autenticación en dos pasos</h1>
-        <p>El dashboard requiere un código TOTP además de la contraseña.</p>
+        <p>El dashboard requiere un código TOTP además del acceso con Google.</p>
         <MfaEnrollForm />
       </section>
     </main>
