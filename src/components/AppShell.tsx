@@ -24,6 +24,9 @@ export function AppShell({ children, contactInfo, navigation, site }: AppShellPr
 
   return (
     <>
+      <a className="skip-link" href="#main-content">
+        Saltar al contenido principal
+      </a>
       <Header contactInfo={contactInfo} navigation={navigation} site={site} />
       {children}
       <Footer contactInfo={contactInfo} navigation={navigation} site={site} />

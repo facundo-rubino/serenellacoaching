@@ -15,19 +15,19 @@ type ContentListingPageProps = {
 
 export function ContentListingPage({ eyebrow, title, accent, intro, items }: ContentListingPageProps) {
   return (
-    <main className={styles.page}>
+    <main id="main-content" className={styles.page}>
       <section className={styles.hero}>
         <div>
           <Link className={styles.backLink} href={routes.home}>
             Inicio
           </Link>
-          <SectionHeading eyebrow={eyebrow} title={title} accent={accent} align="left" />
+          <SectionHeading eyebrow={eyebrow} title={title} accent={accent} align="left" level={1} />
           <p>{intro}</p>
         </div>
       </section>
 
       <section className={styles.listing}>
-        <CardGrid items={items} />
+        <CardGrid items={items} headingLevel={2} />
       </section>
     </main>
   );

@@ -2,14 +2,15 @@
 
 .button {
   position: fixed;
-  right: 18px;
-  bottom: 18px;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
   z-index: 996;
   display: inline-flex;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   align-items: center;
   justify-content: center;
+  border: 0;
   border-radius: $radius-sm;
   background: $color-accent;
   color: $color-surface;
@@ -17,12 +18,26 @@
   opacity: 0;
   pointer-events: none;
   transform: translateY(8px);
-  transition: all 0.4s;
+  visibility: hidden;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    visibility 0s linear 0.25s,
+    background-color 0.2s ease;
 
-  span {
-    color: $color-surface;
-    font-size: 28px;
-    line-height: 0;
+  svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.25;
+  }
+
+  &:hover {
+    background: $color-accent-strong;
   }
 }
 
@@ -30,4 +45,6 @@
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
+  visibility: visible;
+  transition-delay: 0s;
 }

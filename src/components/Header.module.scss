@@ -71,6 +71,9 @@
 }
 
 .logo {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
   margin: 0;
   padding: 0;
   color: $color-ink;
@@ -110,6 +113,7 @@
   color: $color-ink;
   font-size: 15px;
   font-weight: 600;
+  min-height: 44px;
   white-space: nowrap;
   transition: 0.3s;
 
@@ -138,8 +142,8 @@
 
 .menuButton {
   display: none;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border: 0;
   background: transparent;
   color: $color-ink;
@@ -179,7 +183,7 @@
   }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1080px) {
   .menuButton {
     display: block;
   }
@@ -188,16 +192,22 @@
     position: fixed;
     inset: 0;
     z-index: 999;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     background: $color-accent;
     clip-path: circle(0 at calc(100% - 34px) 34px);
     pointer-events: none;
-    transition: clip-path 0.52s cubic-bezier(0.76, 0, 0.24, 1);
+    visibility: hidden;
+    transition:
+      visibility 0s linear 0.52s,
+      clip-path 0.52s cubic-bezier(0.76, 0, 0.24, 1);
   }
 
   .navOpen {
     clip-path: circle(150% at calc(100% - 34px) 34px);
     pointer-events: auto;
+    visibility: visible;
+    transition-delay: 0s;
   }
 
   .navPanel {
@@ -353,6 +363,10 @@
 }
 
 @media (max-width: 520px) {
+  .logo {
+    font-size: clamp(1.35rem, 7vw, 1.875rem);
+  }
+
   .contact {
     flex-wrap: wrap;
     justify-content: center;

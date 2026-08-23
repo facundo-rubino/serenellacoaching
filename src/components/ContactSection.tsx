@@ -9,6 +9,9 @@ type ContactSectionProps = {
 };
 
 export function ContactSection({ contact, compact = false, heading }: ContactSectionProps) {
+  const InfoHeading = compact ? "h2" : "h3";
+  const CtaHeading = compact ? "h2" : "h3";
+
   return (
     <section id="contacto" className={`${styles.section} ${compact ? styles.compact : ""}`}>
       <div className={styles.inner}>
@@ -18,15 +21,15 @@ export function ContactSection({ contact, compact = false, heading }: ContactSec
 
         <div className={styles.infoGrid}>
           <article>
-            <span>Dirección</span>
+            <InfoHeading className={styles.infoTitle}>Dirección</InfoHeading>
             <p>{contact.address}</p>
           </article>
           <article>
-            <span>Email</span>
+            <InfoHeading className={styles.infoTitle}>Email</InfoHeading>
             <a href={`mailto:${contact.email}`}>{contact.email}</a>
           </article>
           <article>
-            <span>Teléfono</span>
+            <InfoHeading className={styles.infoTitle}>Teléfono</InfoHeading>
             <a href={`tel:${contact.phone.replace(/\s/g, "")}`}>{contact.phone}</a>
           </article>
         </div>
@@ -43,7 +46,7 @@ export function ContactSection({ contact, compact = false, heading }: ContactSec
 
           <aside className={styles.cta}>
             <p className={styles.kicker}>¿Empezamos?</p>
-            <h3>Coordinemos un primer encuentro gratuito.</h3>
+            <CtaHeading>Coordinemos un primer encuentro gratuito.</CtaHeading>
             <p>
               Contanos tus intereses y coordinamos un primer encuentro para comenzar este camino
               juntos.

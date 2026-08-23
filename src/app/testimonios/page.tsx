@@ -18,13 +18,14 @@ export default async function TestimonialsPage() {
   const hero = pages.testimonials.sections.listing_hero;
 
   return (
-    <main className={styles.page}>
+    <main id="main-content" className={styles.page}>
       <section className={styles.hero}>
         <SectionHeading
           eyebrow={hero?.eyebrow ?? "Testimonios"}
           title={hero?.title ?? "Experiencias"}
           accent={hero?.accent ?? "reales"}
           align="left"
+          level={1}
         />
         <p>{hero?.body ?? "Historias y devoluciones de personas que transitaron procesos de acompañamiento."}</p>
       </section>

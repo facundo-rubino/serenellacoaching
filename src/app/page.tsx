@@ -15,10 +15,9 @@ export default async function HomePage() {
   const home = pages.home.sections;
 
   return (
-    <>
+    <main id="main-content">
       <Hero section={home.hero} />
-      <main>
-        <section id="terapias" className={`${styles.section} ${styles.alt}`}>
+      <section id="terapias" className={`${styles.section} ${styles.alt}`}>
           <div className={styles.inner}>
             <SectionHeading
               eyebrow={home.therapies_heading?.eyebrow ?? "Terapias"}
@@ -27,9 +26,9 @@ export default async function HomePage() {
             />
             <CardGrid items={therapies} columns={4} />
           </div>
-        </section>
+      </section>
 
-        <section id="testimonios" className={styles.testimonials}>
+      <section id="testimonios" className={styles.testimonials}>
           <div className={styles.testimonialOverlay}>
             <div className={styles.inner}>
               <SectionHeading
@@ -41,9 +40,9 @@ export default async function HomePage() {
               <TestimonialsCarousel items={testimonials} />
             </div>
           </div>
-        </section>
+      </section>
 
-        <section id="cursos" className={`${styles.section} ${styles.alt}`}>
+      <section id="cursos" className={`${styles.section} ${styles.alt}`}>
           <div className={styles.inner}>
             <SectionHeading
               eyebrow={home.courses_heading?.eyebrow ?? "Cursos"}
@@ -52,9 +51,9 @@ export default async function HomePage() {
             />
             <CardGrid items={courses} columns={3} />
           </div>
-        </section>
+      </section>
 
-        <section id="sobre-mi" className={styles.about}>
+      <section id="sobre-mi" className={styles.about}>
           <div className={styles.aboutInner}>
             <SectionHeading
               eyebrow={home.about_heading?.eyebrow ?? "Sobre mi"}
@@ -74,11 +73,10 @@ export default async function HomePage() {
               </div>
             </div>
           </div>
-        </section>
+      </section>
 
-        <FaqSection items={faqItems} heading={home.faq_heading} />
-        <ContactSection contact={contactInfo} heading={home.contact_heading} />
-      </main>
-    </>
+      <FaqSection items={faqItems} heading={home.faq_heading} />
+      <ContactSection contact={contactInfo} heading={home.contact_heading} />
+    </main>
   );
 }

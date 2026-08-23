@@ -18,13 +18,14 @@ export default async function AboutPage() {
   const main = pages.about.sections.main;
 
   return (
-    <main className={styles.page}>
+    <main id="main-content" className={styles.page}>
       <section className={styles.inner}>
         <SectionHeading
           eyebrow={main?.eyebrow ?? "Sobre mi"}
           title={main?.title ?? "Hola! Me llamo"}
           accent={main?.accent ?? "Serenella"}
           align="left"
+          level={1}
         />
         <div className={styles.grid}>
           <div className={styles.image}>

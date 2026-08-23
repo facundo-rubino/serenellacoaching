@@ -18,13 +18,14 @@ export default async function ContactPage() {
   const hero = pages.contact.sections.listing_hero;
 
   return (
-    <main>
+    <main id="main-content">
       <section className={styles.hero}>
         <SectionHeading
           eyebrow={hero?.eyebrow ?? "Contacto"}
           title={hero?.title ?? "Coordinemos"}
           accent={hero?.accent ?? "un encuentro"}
           align="left"
+          level={1}
         />
         <p>{hero?.body ?? "Escribime o completá el formulario para conversar sobre tus intereses."}</p>
       </section>

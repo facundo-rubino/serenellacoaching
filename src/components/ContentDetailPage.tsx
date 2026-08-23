@@ -16,7 +16,7 @@ export function ContentDetailPage({ item, backHref, backLabel }: ContentDetailPa
       : item.description.map((paragraph) => ({ type: "paragraph", content: paragraph }));
 
   return (
-    <main className={styles.page}>
+    <main id="main-content" className={styles.page}>
       <article className={styles.detail}>
         <div className={styles.detailImage}>
           <Image src={item.image} alt={item.imageAlt} fill priority sizes="(max-width: 900px) 100vw, 50vw" />

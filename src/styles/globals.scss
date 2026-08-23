@@ -34,17 +34,26 @@ a {
 
 a:focus-visible,
 button:focus-visible,
-summary:focus-visible {
+summary:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
   @include focus-ring;
 }
 
 button,
-input {
+input,
+textarea,
+select {
   font: inherit;
 }
 
 button {
   cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
 }
 
 h1,
@@ -65,6 +74,25 @@ h4 {
 
 section {
   scroll-margin-top: 96px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1100;
+  border-radius: $radius-sm;
+  background: $color-surface;
+  box-shadow: $shadow-soft;
+  color: $color-ink;
+  font-weight: 700;
+  padding: 12px 16px;
+  transform: translateY(calc(-100% - 20px));
+  transition: transform 0.2s ease;
+
+  &:focus-visible {
+    transform: translateY(0);
+  }
 }
 
 .sr-only {

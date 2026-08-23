@@ -29,7 +29,7 @@ export function Hero({ section }: HeroProps) {
         <h1>
           {title} <span>{accent}</span>
         </h1>
-        <h2>{body}</h2>
+        <p className={styles.subtitle}>{body}</p>
         <Link className={styles.cta} href={section?.ctaHref ?? routes.homeSection("sobre-mi")}>
           {section?.ctaLabel ?? "Sobre mi"}
         </Link>

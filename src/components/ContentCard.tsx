@@ -6,9 +6,10 @@ import styles from "./ContentCard.module.scss";
 type ContentCardProps = {
   item: ContentCardType;
   priority?: boolean;
+  headingLevel?: 2 | 3;
 };
 
-export function ContentCard({ item, priority = false }: ContentCardProps) {
+export function ContentCard({ item, priority = false, headingLevel = 3 }: ContentCardProps) {
   return (
     <article className={styles.card}>
       <Link className={styles.imageLink} href={item.href} aria-label={`Ver ${item.title}`}>
@@ -22,7 +23,7 @@ export function ContentCard({ item, priority = false }: ContentCardProps) {
       </Link>
       <div className={styles.body}>
         {item.meta ? <p className={styles.meta}>{item.meta}</p> : null}
-        <h3>{item.title}</h3>
+        {headingLevel === 2 ? <h2>{item.title}</h2> : <h3>{item.title}</h3>}
         <p className={styles.summary}>{item.summary}</p>
         <p>{item.description[0]}</p>
         <Link className={styles.link} href={item.href}>

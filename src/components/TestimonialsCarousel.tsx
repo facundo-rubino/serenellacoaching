@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Testimonial } from "@/lib/content/types";
 import styles from "./TestimonialsCarousel.module.scss";
 
@@ -11,31 +11,7 @@ type TestimonialsCarouselProps = {
 
 export function TestimonialsCarousel({ items }: TestimonialsCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [canAutoplay, setCanAutoplay] = useState(false);
   const active = items[activeIndex];
-  const hasItems = items.length > 0;
-
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const updatePreference = () => setCanAutoplay(!query.matches);
-
-    updatePreference();
-    query.addEventListener("change", updatePreference);
-
-    return () => query.removeEventListener("change", updatePreference);
-  }, []);
-
-  useEffect(() => {
-    if (!hasItems || !canAutoplay) {
-      return;
-    }
-
-    const interval = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % items.length);
-    }, 6000);
-
-    return () => window.clearInterval(interval);
-  }, [canAutoplay, hasItems, items.length]);
 
   if (!active) {
     return null;
@@ -58,7 +34,7 @@ export function TestimonialsCarousel({ items }: TestimonialsCarouselProps) {
         <button type="button" onClick={previous} aria-label="Testimonio anterior">
           <span aria-hidden="true">‹</span>
         </button>
-        <div className={styles.dots} aria-label="Seleccionar testimonio">
+        <div className={styles.dots} role="group" aria-label="Seleccionar testimonio">
           {items.map((item, index) => (
             <button
               key={item.name}

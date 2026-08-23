@@ -28,6 +28,7 @@
   align-content: start;
   padding: 25px 15px;
 
+  h2,
   h3 {
     color: $color-ink;
     font-size: 18px;
@@ -65,7 +66,7 @@
 .link {
   display: inline-flex;
   width: fit-content;
-  min-height: 40px;
+  min-height: 44px;
   align-items: center;
   color: $color-accent;
   font-size: 14px;

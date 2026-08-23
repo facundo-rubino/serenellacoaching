@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
 import type { ContactInfo, NavigationItem, SiteInfo } from "@/lib/content/types";
@@ -13,12 +14,14 @@ type HeaderProps = {
 };
 
 export function Header({ contactInfo, navigation, site }: HeaderProps) {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 40);
 
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => window.removeEventListener("scroll", onScroll);
@@ -26,7 +29,7 @@ export function Header({ contactInfo, navigation, site }: HeaderProps) {
 
   return (
     <>
-      <section className={styles.topbar} aria-label="Información de contacto">
+      <div className={styles.topbar}>
         <div className={styles.topbarInner}>
           <div className={styles.contact}>
             <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
@@ -40,7 +43,7 @@ export function Header({ contactInfo, navigation, site }: HeaderProps) {
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
       <header
         className={`${styles.header} ${isScrolled ? styles.scrolled : ""} ${isOpen ? "nav-open" : ""}`}
@@ -76,17 +79,26 @@ export function Header({ contactInfo, navigation, site }: HeaderProps) {
               </Link>
 
               <div className={styles.navLinks}>
-                {navigation.map((item, index) => (
-                  <Link
-                    key={item.href}
-                    className={index === 0 ? styles.active : undefined}
-                    href={item.href}
-                    onClick={() => setIsOpen(false)}
-                    style={{ "--index": index } as CSSProperties}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+                {navigation.map((item, index) => {
+                  const sectionPath = item.href.startsWith("/#") ? `/${item.href.slice(2)}` : item.href;
+                  const isActive =
+                    pathname === "/"
+                      ? index === 0
+                      : sectionPath !== "/" && pathname?.startsWith(sectionPath);
+
+                  return (
+                    <Link
+                      key={item.href}
+                      className={isActive ? styles.active : undefined}
+                      href={item.href}
+                      aria-current={isActive ? "page" : undefined}
+                      onClick={() => setIsOpen(false)}
+                      style={{ "--index": index } as CSSProperties}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
               </div>
 
               <div className={styles.mobileMeta}>
