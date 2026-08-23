@@ -25,7 +25,16 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
         <h1>Administrador</h1>
         <p>Acceso privado para gestionar contenido del sitio.</p>
         {params.error === "unauthorized" ? (
-          <p className={styles.error}>El usuario autenticado no tiene rol administrador.</p>
+          <p className={styles.error}>
+            La cuenta quedó registrada, pero todavía no tiene rol administrador.
+          </p>
+        ) : null}
+        {params.error === "oauth" ? <p className={styles.error}>No se pudo completar el acceso con Google.</p> : null}
+        {params.error === "google_required" ? (
+          <p className={styles.error}>El panel solo admite cuentas autenticadas con Google.</p>
+        ) : null}
+        {params.error === "config" ? (
+          <p className={styles.error}>Supabase Auth no está configurado.</p>
         ) : null}
         <LoginForm />
       </section>

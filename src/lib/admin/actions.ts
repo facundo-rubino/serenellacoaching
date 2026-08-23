@@ -2,10 +2,12 @@
 
 import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/auth";
 import { requireSupabaseServerClient } from "@/lib/supabase/server";
+import { getSiteUrl } from "@/lib/supabase/config";
 
 export type ActionState = {
   error?: string;
@@ -73,48 +75,26 @@ function safeMessage(error: unknown) {
   return error instanceof Error ? error.message : "No se pudo completar la acción.";
 }
 
-export async function loginAdminAction(_: ActionState, formData: FormData): Promise<ActionState> {
-  const email = formString(formData, "email");
-  const password = formString(formData, "password");
-
-  const parsed = z.object({ email: z.string().email(), password: z.string().min(8) }).safeParse({
-    email,
-    password,
+export async function loginAdminWithGoogleAction() {
+  const supabase = await requireSupabaseServerClient();
+  const requestHeaders = await headers();
+  const origin = requestHeaders.get("origin") ?? getSiteUrl();
+  const redirectTo = new URL("/admin/auth/callback", origin).toString();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo,
+      queryParams: {
+        prompt: "select_account",
+      },
+    },
   });
 
-  if (!parsed.success) {
-    return { error: "Ingresá email y contraseña válidos." };
+  if (error || !data.url) {
+    redirect("/admin/login?error=oauth");
   }
 
-  const supabase = await requireSupabaseServerClient();
-  const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
-
-  if (error || !data.user) {
-    return { error: "Credenciales inválidas." };
-  }
-
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", data.user.id)
-    .single<{ role: string }>();
-
-  if (profileError || profile?.role !== "admin") {
-    await supabase.auth.signOut();
-    return { error: "Este usuario no tiene permisos de administrador." };
-  }
-
-  const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-
-  if (aal?.nextLevel === "aal2" && aal.currentLevel !== "aal2") {
-    redirect("/admin/mfa/challenge");
-  }
-
-  if (aal?.nextLevel !== "aal2") {
-    redirect("/admin/mfa/enroll");
-  }
-
-  redirect("/admin");
+  redirect(data.url);
 }
 
 export async function signOutAdminAction() {

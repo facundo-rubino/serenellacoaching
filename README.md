@@ -36,8 +36,14 @@ Las imágenes públicas viven en `public/assets/img`.
    - `supabase link`
    - `supabase db push`
    - Ejecutar `supabase/seed.sql` una vez desde SQL Editor o con `psql`.
-3. Invitar o crear el usuario administrador en Supabase Auth.
-4. Marcarlo como admin:
+3. Configurar Google OAuth:
+   - Crear un cliente OAuth tipo **Web application** en Google Auth Platform.
+   - Agregar `http://localhost:3000`, `https://serenellacoaching.com` y `https://www.serenellacoaching.com` como orígenes autorizados.
+   - Agregar como redirect URI la callback que muestra Supabase en **Authentication → Providers → Google** (`https://<project-ref>.supabase.co/auth/v1/callback`).
+   - Copiar el Client ID y Client Secret en el provider Google de Supabase y activarlo.
+   - En **Authentication → URL Configuration**, configurar el Site URL y permitir `/admin/auth/callback` para local, preview y producción.
+4. Entrar una primera vez en `/admin/login` con la cuenta de Google elegida. El acceso será rechazado, pero Supabase creará el usuario y su perfil.
+5. Marcar esa cuenta como admin:
    ```sql
    insert into public.profiles (id, email, role)
    select id, email, 'admin'
@@ -45,7 +51,9 @@ Las imágenes públicas viven en `public/assets/img`.
    where email = 'admin@example.com'
    on conflict (id) do update set role = 'admin';
    ```
-5. Entrar a `/admin/login`. El primer ingreso obliga a configurar MFA TOTP antes de acceder al dashboard.
+6. Volver a entrar con Google. El primer acceso autorizado obliga a configurar MFA TOTP antes de mostrar el dashboard.
+
+El panel rechaza sesiones administrativas que no provengan de Google, aunque el usuario tenga rol `admin`.
 
 ## Deploy en Vercel
 
