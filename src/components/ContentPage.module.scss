@@ -1,0 +1,123 @@
+@use "../styles/tokens" as *;
+
+.page {
+  background: $color-surface;
+}
+
+.hero {
+  background: $color-soft;
+  padding-block: 74px 54px;
+
+  > div {
+    @include container;
+    max-width: 880px;
+  }
+
+  p {
+    max-width: 720px;
+    color: $color-muted;
+    font-size: 1.05rem;
+  }
+}
+
+.backLink {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 40px;
+  align-items: center;
+  margin-bottom: 12px;
+  color: $color-accent-strong;
+  font-weight: 800;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.listing {
+  @include container;
+  padding-block: 54px 82px;
+}
+
+.detail {
+  @include container;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  gap: clamp(28px, 6vw, 62px);
+  align-items: center;
+  padding-block: 74px 88px;
+}
+
+.detailImage {
+  position: relative;
+  min-height: 560px;
+  overflow: hidden;
+  border-radius: $radius-md;
+  background: $color-soft;
+  box-shadow: $shadow-card;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.detailCopy {
+  display: grid;
+  gap: 14px;
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 3.4rem);
+  }
+}
+
+.meta {
+  width: fit-content;
+  border-radius: 999px;
+  background: $color-label;
+  color: $color-accent;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 8px 20px;
+  text-transform: uppercase;
+}
+
+.summary {
+  color: #aaaaaa;
+  font-size: 1.18rem;
+  font-weight: 400;
+}
+
+.body {
+  display: grid;
+  gap: 14px;
+  color: $color-muted;
+
+  h2 {
+    margin-top: 12px;
+    color: $color-ink;
+    font-size: 1.45rem;
+  }
+}
+
+.inlineImage {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+  border-radius: $radius-md;
+  background: $color-soft;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+@media (max-width: 900px) {
+  .detail {
+    grid-template-columns: 1fr;
+  }
+
+  .detailImage {
+    min-height: 420px;
+  }
+}

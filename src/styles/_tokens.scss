@@ -1,0 +1,26 @@
+$color-ink: #222222;
+$color-body: #444444;
+$color-muted: #777777;
+$color-soft: #f6f9fe;
+$color-footer-soft: #f1f6fe;
+$color-surface: #ffffff;
+$color-accent: #ff7453;
+$color-accent-strong: #ff8466;
+$color-blue-hover: #0d58ba;
+$color-label: #f7f7f7;
+$color-border: #d4e5fc;
+$shadow-soft: 0px 2px 15px rgba(0, 0, 0, 0.1);
+$shadow-card: 0px 2px 15px rgba(16, 110, 234, 0.15);
+$radius-sm: 4px;
+$radius-md: 4px;
+$container: 1140px;
+
+@mixin container {
+  width: min(100% - 32px, $container);
+  margin-inline: auto;
+}
+
+@mixin focus-ring {
+  outline: 3px solid rgba($color-accent, 0.35);
+  outline-offset: 3px;
+}

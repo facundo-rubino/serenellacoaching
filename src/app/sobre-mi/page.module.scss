@@ -1,0 +1,46 @@
+@use "../../styles/tokens" as *;
+
+.page {
+  background: $color-surface;
+}
+
+.inner {
+  @include container;
+  padding-block: 74px 86px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 42px;
+  align-items: center;
+}
+
+.image {
+  position: relative;
+  min-height: 560px;
+  overflow: hidden;
+  border-radius: $radius-md;
+  background: $color-soft;
+  box-shadow: $shadow-card;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.copy {
+  display: grid;
+  gap: 16px;
+  color: $color-muted;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .image {
+    min-height: 420px;
+  }
+}

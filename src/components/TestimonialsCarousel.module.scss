@@ -1,0 +1,85 @@
+@use "../styles/tokens" as *;
+
+.carousel {
+  display: grid;
+  gap: 20px;
+  overflow: hidden;
+}
+
+.card {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  color: $color-surface;
+  text-align: center;
+  padding: 0;
+  box-shadow: none;
+
+  h3 {
+    margin: 10px 0 5px;
+    color: $color-surface;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  blockquote {
+    width: min(100%, 80%);
+    margin: 0 auto 15px;
+    color: #eeeeee;
+    font-size: 1rem;
+    font-style: italic;
+  }
+}
+
+.avatar {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border: 6px solid rgba($color-surface, 0.22);
+  border-radius: 999px;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+
+  > button {
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba($color-surface, 0.16);
+    color: $color-surface;
+    font-size: 1.8rem;
+    line-height: 1;
+
+    &:hover {
+      background: rgba($color-surface, 0.24);
+    }
+  }
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+
+  button {
+    width: 12px;
+    height: 12px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba($color-surface, 0.5);
+    padding: 0;
+
+    &[aria-current="true"] {
+      background: $color-accent;
+    }
+  }
+}

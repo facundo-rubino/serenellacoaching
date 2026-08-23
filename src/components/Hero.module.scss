@@ -1,0 +1,102 @@
+@use "../styles/tokens" as *;
+
+.hero {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: 75vh;
+  align-items: center;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.image {
+  z-index: -2;
+  object-fit: cover;
+  object-position: top left;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.inner {
+  @include container;
+  position: relative;
+
+  h1 {
+    margin: 0;
+    color: $color-ink;
+    font-family: var(--font-poppins), sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 56px;
+
+    span {
+      color: $color-accent;
+    }
+  }
+
+  h2 {
+    margin: 5px 0 30px;
+    color: $color-ink;
+    font-size: 24px;
+    font-weight: 400;
+  }
+}
+
+.cta {
+  display: inline-block;
+  border-radius: $radius-sm;
+  background: $color-accent;
+  color: $color-surface;
+  font-family: var(--font-roboto), sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 10px 28px;
+  text-transform: uppercase;
+  transition: 0.5s;
+
+  &:hover {
+    background: $color-accent;
+    color: $color-surface;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    min-height: 75vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    height: 100vh;
+  }
+
+  .inner {
+    h1 {
+      font-size: 28px;
+      line-height: 36px;
+    }
+
+    h2 {
+      font-size: 18px;
+      line-height: 24px;
+    }
+  }
+
+  .cta {
+    font-size: 13px;
+  }
+}
+
+@media (max-height: 500px) {
+  .hero {
+    height: 120vh;
+  }
+}

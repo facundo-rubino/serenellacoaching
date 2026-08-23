@@ -1,0 +1,12 @@
+@use "../../styles/tokens" as *;
+
+.hero {
+  @include container;
+  max-width: 880px;
+  padding-block: 74px 0;
+
+  > p {
+    color: $color-muted;
+    font-size: 1.08rem;
+  }
+}
