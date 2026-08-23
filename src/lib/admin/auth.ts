@@ -18,6 +18,13 @@ export async function requireAdmin(options: AdminGuardOptions = {}) {
     redirect("/admin/login");
   }
 
+  const providers = Array.isArray(user.app_metadata.providers) ? user.app_metadata.providers : [];
+
+  if (!providers.includes("google")) {
+    await supabase.auth.signOut();
+    redirect("/admin/login?error=google_required");
+  }
+
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("id,email,display_name,role")
