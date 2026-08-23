@@ -25,26 +25,33 @@ export function GoogleReviewsWidget({ widgetRef }: GoogleReviewsWidgetProps) {
 
     setStatus("loading");
 
-    const observer = new MutationObserver(() => {
-      if (container.childElementCount > 0) {
+    const updateStatus = () => {
+      if (container.querySelector("iframe")) {
         setStatus("ready");
       }
-    });
+    };
+
+    const observer = new MutationObserver(updateStatus);
 
     observer.observe(container, { childList: true, subtree: true });
+    updateStatus();
 
-    document.getElementById(EMBEDSOCIAL_SCRIPT_ID)?.remove();
+    const handleError = () => setStatus("error");
+    let script = document.getElementById(EMBEDSOCIAL_SCRIPT_ID) as HTMLScriptElement | null;
 
-    const script = document.createElement("script");
-    script.id = EMBEDSOCIAL_SCRIPT_ID;
-    script.src = EMBEDSOCIAL_SCRIPT_URL;
-    script.async = true;
-    script.onerror = () => setStatus("error");
-    document.head.appendChild(script);
+    if (!script) {
+      script = document.createElement("script");
+      script.id = EMBEDSOCIAL_SCRIPT_ID;
+      script.src = EMBEDSOCIAL_SCRIPT_URL;
+      script.async = true;
+      document.head.appendChild(script);
+    }
+
+    script.addEventListener("error", handleError);
 
     return () => {
       observer.disconnect();
-      script.remove();
+      script.removeEventListener("error", handleError);
     };
   }, [widgetRef]);
 

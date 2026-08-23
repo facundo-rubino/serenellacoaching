@@ -47,11 +47,19 @@ export default async function HomePage() {
                   <GoogleReviewsWidget widgetRef={widgetRef} />
                 </div>
                 {googleReviewsUrl ? (
-                  <a href={googleReviewsUrl} target="_blank" rel="noreferrer">
+                  <a
+                    href={googleReviewsUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={styles.googleReviewsLink}
+                  >
                     {home.testimonials_heading?.ctaLabel ?? "Ver reseñas de Google"}
                   </a>
                 ) : (
-                  <Link href={home.testimonials_heading?.ctaHref ?? routes.testimonials}>
+                  <Link
+                    href={home.testimonials_heading?.ctaHref ?? routes.testimonials}
+                    className={styles.googleReviewsLink}
+                  >
                     {home.testimonials_heading?.ctaLabel ?? "Ver reseñas de Google"}
                   </Link>
                 )}

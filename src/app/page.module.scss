@@ -38,29 +38,30 @@
     font-size: 1.08rem;
   }
 
-  a {
-    display: inline-flex;
-    min-height: 44px;
-    align-items: center;
-    border-radius: $radius-sm;
-    background: $color-accent;
-    color: $color-surface;
-    font-family: var(--font-roboto), sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 1px;
-    padding: 12px 28px;
-    text-transform: uppercase;
-
-    &:hover {
-      background: $color-accent-strong;
-    }
-  }
 }
 
 .testimonialWidget {
   width: 100%;
   max-width: 1120px;
+}
+
+.googleReviewsLink {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  border-radius: $radius-sm;
+  background: $color-accent;
+  color: $color-surface;
+  font-family: var(--font-roboto), sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 12px 28px;
+  text-transform: uppercase;
+
+  &:hover {
+    background: $color-accent-strong;
+  }
 }
 
 .about {
