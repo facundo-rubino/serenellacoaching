@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { ClientRow } from "./types";
+import type { ClientRow, ClientSessionRow, ClientSummaryRow } from "./types";
 
 export type ClientFilters = {
   q?: string;
@@ -52,4 +52,34 @@ export async function listClientNames(supabase: SupabaseClient) {
 export function whatsappUrl(phone: string | null) {
   const digits = phone?.replace(/\D/g, "");
   return digits ? `https://wa.me/${digits}` : null;
+}
+
+export async function listTherapies(supabase: SupabaseClient) {
+  const { data, error } = await supabase
+    .from("content_items")
+    .select("id,title")
+    .eq("type", "therapy")
+    .order("sort_order");
+  if (error) throw error;
+  return (data ?? []) as { id: string; title: string }[];
+}
+
+export async function listClientSessions(supabase: SupabaseClient, clientId: string) {
+  const { data, error } = await supabase
+    .from("client_sessions")
+    .select("id,client_id,therapy_id,therapy_label,session_date,modality,amount,paid,notes")
+    .eq("client_id", clientId)
+    .order("session_date", { ascending: false })
+    .returns<ClientSessionRow[]>();
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function listClientSummaries(supabase: SupabaseClient) {
+  const { data, error } = await supabase
+    .from("client_summary")
+    .select("client_id,first_visit,last_visit,sessions_count,days_since_last")
+    .returns<ClientSummaryRow[]>();
+  if (error) throw error;
+  return new Map((data ?? []).map((row) => [row.client_id, row]));
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin/auth";
-import { listClientPlaces, listClients } from "@/lib/admin/clients";
+import { listClientPlaces, listClientSummaries, listClients } from "@/lib/admin/clients";
+import { formatSince } from "@/lib/admin/session-summary";
 import styles from "../../admin.module.scss";
 
 export const dynamic = "force-dynamic";
@@ -15,9 +16,10 @@ export default async function ClientsPage({ searchParams }: { searchParams: Sear
   const { q, city, estado } = await searchParams;
   const archived = estado === "archivados";
   const { supabase } = await requireAdmin();
-  const [clients, places] = await Promise.all([
+  const [clients, places, summaries] = await Promise.all([
     listClients(supabase, { q, city, archived }),
     listClientPlaces(supabase),
+    listClientSummaries(supabase),
   ]);
 
   return (
@@ -27,7 +29,11 @@ export default async function ClientsPage({ searchParams }: { searchParams: Sear
           <h1>Clientes</h1>
           <p>{clients.length} {archived ? "archivados" : "activos"}</p>
         </div>
-        <Link className={styles.secondaryButton} href="/admin/clientes/nuevo">+ Nuevo cliente</Link>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <Link className={styles.secondaryButton} href="/admin/clientes/sesion">Registrar sesión</Link>
+          <Link className={styles.secondaryButton} href="/admin/clientes/recontactar">Para volver a contactar</Link>
+          <Link className={styles.secondaryButton} href="/admin/clientes/nuevo">+ Nuevo cliente</Link>
+        </div>
       </header>
 
       <form className={styles.inlineForm} role="search">
@@ -60,7 +66,11 @@ export default async function ClientsPage({ searchParams }: { searchParams: Sear
             <li key={client.id}>
               <Link href={`/admin/clientes/${client.id}`} className={styles.editorItem} style={{ display: "grid", gap: 3, padding: 14 }}>
                 <strong>{client.full_name}</strong>
-                <small>{[client.city, client.phone].filter(Boolean).join(" · ") || "Sin datos de contacto"}</small>
+                <small>
+                  {[client.city, client.phone].filter(Boolean).join(" · ") || "Sin datos de contacto"}
+                  {" · Última sesión "}
+                  {formatSince(summaries.get(client.id)?.days_since_last ?? null)}
+                </small>
               </Link>
             </li>
           ))}

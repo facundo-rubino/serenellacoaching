@@ -143,3 +143,23 @@ export type ClientRow = {
   created_at: string;
   updated_at: string;
 };
+
+export type ClientSessionRow = {
+  id: string;
+  client_id: string;
+  therapy_id: string | null;
+  therapy_label: string | null;
+  session_date: string;
+  modality: "presencial" | "online";
+  amount: number | null;
+  paid: boolean;
+  notes: string | null;
+};
+
+export type ClientSummaryRow = {
+  client_id: string;
+  first_visit: string | null;
+  last_visit: string | null;
+  sessions_count: number;
+  days_since_last: number | null;
+};

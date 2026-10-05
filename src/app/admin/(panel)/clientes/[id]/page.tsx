@@ -3,9 +3,11 @@ import { notFound } from "next/navigation";
 import { z } from "zod";
 import { AdminActionForm } from "../../../AdminActionForm";
 import { requireAdmin } from "@/lib/admin/auth";
-import { setClientArchivedAction, updateClientAction } from "@/lib/admin/actions";
-import { getClient, listClientNames, listClientPlaces, whatsappUrl } from "@/lib/admin/clients";
+import { createSessionAction, deleteSessionAction, setClientArchivedAction, updateClientAction } from "@/lib/admin/actions";
+import { getClient, listClientNames, listClientPlaces, listClientSessions, listClientSummaries, listTherapies, whatsappUrl } from "@/lib/admin/clients";
+import { formatSince, summarizeSessions } from "@/lib/admin/session-summary";
 import { ClientFields, ClientSubmit } from "../ClientForm";
+import { SessionFields } from "../SessionFields";
 import styles from "../../../admin.module.scss";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +24,17 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
   const client = await getClient(supabase, id);
   if (!client) notFound();
 
-  const [places, people] = await Promise.all([listClientPlaces(supabase), listClientNames(supabase)]);
+  const [places, people, therapies, sessions] = await Promise.all([
+    listClientPlaces(supabase),
+    listClientNames(supabase),
+    listTherapies(supabase),
+    listClientSessions(supabase, id),
+  ]);
+  const summary = summarizeSessions(sessions, client.first_visit_date);
+  const daysSince = (await listClientSummaries(supabase)).get(id)?.days_since_last ?? null;
+  const sinceLabel = summary.firstVisit
+    ? new Date(`${summary.firstVisit}T00:00:00`).toLocaleDateString("es-AR", { month: "long", year: "numeric" })
+    : null;
   const whatsapp = whatsappUrl(client.phone);
   const archived = Boolean(client.archived_at);
 
@@ -50,7 +62,48 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
 
       <article className={styles.panel}>
         <h2>Sesiones</h2>
-        <p>Pronto vas a poder registrar y ver acá las sesiones de este cliente.</p>
+        <p>
+          {[
+            sinceLabel ? `Viene desde ${sinceLabel}` : null,
+            `${summary.sessionsCount} ${summary.sessionsCount === 1 ? "sesión" : "sesiones"}`,
+            summary.lastVisit ? `última ${formatSince(daysSince)}` : null,
+            summary.favoriteTherapy ? `suele elegir ${summary.favoriteTherapy}` : null,
+          ]
+            .filter(Boolean)
+            .join(" · ")}
+        </p>
+
+        <AdminActionForm
+          className={styles.editorForm}
+          action={createSessionAction}
+          successMessage="Sesión registrada."
+          resetOnSuccess
+        >
+          <SessionFields clientId={client.id} therapies={therapies} />
+          <ClientSubmit label="Registrar sesión" />
+        </AdminActionForm>
+
+        {sessions.map((session) => (
+          <AdminActionForm
+            key={session.id}
+            className={styles.deleteForm}
+            action={deleteSessionAction}
+            successMessage="Sesión eliminada."
+            confirmation={{
+              title: "¿Eliminar esta sesión?",
+              description: "Se borra del historial y no se puede deshacer.",
+              confirmLabel: "Eliminar",
+            }}
+          >
+            <input type="hidden" name="id" value={session.id} />
+            <span>
+              {new Date(`${session.session_date}T00:00:00`).toLocaleDateString("es-AR")} · {session.therapy_label ?? "Sin terapia"}
+              {session.modality === "online" ? " · Online" : ""}
+              {session.paid ? "" : " · Sin pagar"}
+            </span>
+            <ClientSubmit label="Eliminar" />
+          </AdminActionForm>
+        ))}
       </article>
 
       <AdminActionForm
