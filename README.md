@@ -2,6 +2,8 @@
 
 Sitio migrado a Next.js, React, TypeScript y SCSS nativo.
 
+Objetivo y roadmap: ver [`docs/VISION.md`](docs/VISION.md). Cada feature se define primero como spec en [`docs/specs/`](docs/specs/).
+
 ## Scripts
 
 - `npm run dev`: entorno local.
