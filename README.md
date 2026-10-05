@@ -2,6 +2,8 @@
 
 Sitio migrado a Next.js, React, TypeScript y SCSS nativo.
 
+Objetivo y roadmap: ver [`docs/VISION.md`](docs/VISION.md). Cada feature se define primero como spec en [`docs/specs/`](docs/specs/).
+
 ## Scripts
 
 - `npm run dev`: entorno local.
@@ -51,6 +53,7 @@ Las imágenes públicas viven en `public/assets/img`.
    where email = 'admin@example.com'
    on conflict (id) do update set role = 'admin';
    ```
+   Usar `'owner'` en lugar de `'admin'` para la cuenta técnica: ve además `/admin/avanzado` (configuración del sitio, navegación, redes, páginas y multimedia).
 6. Volver a entrar con Google. El primer acceso autorizado obliga a configurar MFA TOTP antes de mostrar el dashboard.
 
 El panel rechaza sesiones administrativas que no provengan de Google, aunque el usuario tenga rol `admin`.

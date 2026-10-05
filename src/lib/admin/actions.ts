@@ -64,7 +64,6 @@ function revalidatePublicPaths() {
   revalidatePath("/");
   revalidatePath("/terapias");
   revalidatePath("/cursos");
-  revalidatePath("/testimonios");
   revalidatePath("/sobre-mi");
   revalidatePath("/contacto");
   revalidatePath("/terapias/[slug]", "page");
@@ -186,7 +185,7 @@ export async function verifyMfaChallengeAction(_: ActionState, formData: FormDat
 }
 
 export async function updateSiteSettingsAction(formData: FormData) {
-  const { supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin({ requireOwner: true });
   const payload = z
     .object({
       id: z.literal(true),
@@ -240,7 +239,7 @@ export async function updateContactSettingsAction(formData: FormData) {
 }
 
 export async function upsertNavigationItemAction(formData: FormData) {
-  const { supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin({ requireOwner: true });
   const id = optionalUuid(formData);
   const payload = {
     label: z.string().min(1).parse(formString(formData, "label")),
@@ -255,7 +254,7 @@ export async function upsertNavigationItemAction(formData: FormData) {
 }
 
 export async function deleteNavigationItemAction(formData: FormData) {
-  const { supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin({ requireOwner: true });
   const id = z.string().uuid().parse(formString(formData, "id"));
   const { error } = await supabase.from("navigation_items").delete().eq("id", id);
   if (error) throw error;
@@ -263,7 +262,7 @@ export async function deleteNavigationItemAction(formData: FormData) {
 }
 
 export async function upsertSocialLinkAction(formData: FormData) {
-  const { supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin({ requireOwner: true });
   const id = optionalUuid(formData);
   const payload = {
     label: z.string().min(1).parse(formString(formData, "label")),
@@ -278,7 +277,7 @@ export async function upsertSocialLinkAction(formData: FormData) {
 }
 
 export async function deleteSocialLinkAction(formData: FormData) {
-  const { supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin({ requireOwner: true });
   const id = z.string().uuid().parse(formString(formData, "id"));
   const { error } = await supabase.from("social_links").delete().eq("id", id);
   if (error) throw error;
@@ -342,32 +341,6 @@ export async function deleteContentBlockAction(formData: FormData) {
   revalidatePublicPaths();
 }
 
-export async function upsertReviewAction(formData: FormData) {
-  const { supabase } = await requireAdmin();
-  const id = optionalUuid(formData);
-  const payload = {
-    reviewer_name: z.string().min(1).parse(formString(formData, "reviewer_name")),
-    quote: z.string().min(1).parse(formString(formData, "quote")),
-    image_url: z.string().min(1).parse(formString(formData, "image_url")),
-    image_alt: z.string().min(1).parse(formString(formData, "image_alt")),
-    source: nullableFormString(formData, "source"),
-    status: statusSchema.parse(formString(formData, "status") || "draft"),
-    sort_order: formInteger(formData, "sort_order"),
-  };
-  const query = id ? supabase.from("reviews").update(payload).eq("id", id) : supabase.from("reviews").insert(payload);
-  const { error } = await query;
-  if (error) throw error;
-  revalidatePublicPaths();
-}
-
-export async function deleteReviewAction(formData: FormData) {
-  const { supabase } = await requireAdmin();
-  const id = z.string().uuid().parse(formString(formData, "id"));
-  const { error } = await supabase.from("reviews").delete().eq("id", id);
-  if (error) throw error;
-  revalidatePublicPaths();
-}
-
 export async function upsertFaqAction(formData: FormData) {
   const { supabase } = await requireAdmin();
   const id = optionalUuid(formData);
@@ -392,7 +365,7 @@ export async function deleteFaqAction(formData: FormData) {
 }
 
 export async function upsertPageSectionAction(formData: FormData) {
-  const { supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin({ requireOwner: true });
   const id = z.string().uuid().parse(formString(formData, "id"));
   const payload = {
     eyebrow: nullableFormString(formData, "eyebrow"),
@@ -412,7 +385,7 @@ export async function upsertPageSectionAction(formData: FormData) {
 }
 
 export async function uploadMediaAction(formData: FormData) {
-  const { supabase, user } = await requireAdmin();
+  const { supabase, user } = await requireAdmin({ requireOwner: true });
   const file = formData.get("file");
 
   if (!(file instanceof File) || file.size === 0) {
@@ -459,7 +432,7 @@ export async function uploadMediaAction(formData: FormData) {
 }
 
 export async function updateMediaAssetAction(formData: FormData) {
-  const { supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin({ requireOwner: true });
   const id = z.string().uuid().parse(formString(formData, "id"));
   const payload = {
     title: nullableFormString(formData, "title"),
@@ -472,7 +445,7 @@ export async function updateMediaAssetAction(formData: FormData) {
 }
 
 export async function deleteMediaAssetAction(formData: FormData) {
-  const { supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin({ requireOwner: true });
   const id = z.string().uuid().parse(formString(formData, "id"));
   const path = z.string().min(1).parse(formString(formData, "path"));
 

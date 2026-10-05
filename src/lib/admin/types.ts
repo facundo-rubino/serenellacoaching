@@ -2,7 +2,7 @@ export type AdminProfile = {
   id: string;
   email: string | null;
   display_name: string | null;
-  role: "admin" | "editor" | "user";
+  role: "owner" | "admin" | "editor" | "user";
 };
 
 export type SiteSettingsRow = {
@@ -57,17 +57,6 @@ export type AdminContentItemRow = {
   blocks: AdminContentBlockRow[];
 };
 
-export type AdminReviewRow = {
-  id: string;
-  reviewer_name: string;
-  quote: string;
-  image_url: string;
-  image_alt: string;
-  source: string | null;
-  status: "draft" | "published";
-  sort_order: number;
-};
-
 export type AdminFaqRow = {
   id: string;
   question: string;
@@ -113,14 +102,16 @@ export type AdminMediaAssetRow = {
   created_at: string;
 };
 
-export type AdminDashboardData = {
-  site: SiteSettingsRow | null;
+export type AdminSiteData = {
   contact: ContactSettingsRow | null;
+  contentItems: AdminContentItemRow[];
+  faqItems: AdminFaqRow[];
+};
+
+export type AdminAdvancedData = {
+  site: SiteSettingsRow | null;
   navigation: AdminLinkRow[];
   socialLinks: AdminLinkRow[];
-  contentItems: AdminContentItemRow[];
-  reviews: AdminReviewRow[];
-  faqItems: AdminFaqRow[];
   pages: AdminPageRow[];
   mediaAssets: AdminMediaAssetRow[];
 };
