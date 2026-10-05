@@ -10,6 +10,18 @@ El admin actual (`src/app/admin/page.tsx`, ~700 líneas) es un CMS genérico: co
 - Eliminado `src/app/testimonios/page.module.scss`: la ruta solo redirige.
 - Agregados `docs/VISION.md`, specs y `CLAUDE.md` para alinear objetivos.
 
+Las secciones 1–3 de abajo quedaron resueltas en la segunda iteración. Sigue pendiente:
+- Subir fotos directamente desde el formulario de terapia/curso (hoy hay que pegar un enlace; la biblioteca multimedia está en Avanzado).
+- Tests (sección 4) y las preguntas abiertas.
+
+### Segunda iteración (hecha)
+
+- Rol `owner` (migración `202610050001_owner_role.sql`): `is_admin()` acepta `owner` y `admin`; nueva `is_owner()`.
+- Admin partido en rutas con el grupo `src/app/admin/(panel)/`: `/admin` (inicio), `/admin/sitio`, `/admin/avanzado` (solo owner, también validado en las server actions).
+- En "Mi sitio" los campos técnicos (slug, orden, SEO, mapa, formulario) solo los ve el owner; para el resto viajan ocultos y conservan su valor.
+- Testimonios manuales quitados del admin (la tabla `reviews` sigue en la base).
+- Textos en lenguaje simple ("¿Se ve en el sitio?", "Visible / Oculto").
+
 ## Pendiente
 
 ### 1. Separar "lo de ella" de "lo técnico"

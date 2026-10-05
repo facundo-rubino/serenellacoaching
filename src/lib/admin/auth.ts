@@ -4,7 +4,10 @@ import type { AdminProfile } from "./types";
 
 type AdminGuardOptions = {
   requireMfa?: boolean;
+  requireOwner?: boolean;
 };
+
+const adminRoles = new Set(["owner", "admin"]);
 
 export async function requireAdmin(options: AdminGuardOptions = {}) {
   const requireMfa = options.requireMfa ?? true;
@@ -31,8 +34,12 @@ export async function requireAdmin(options: AdminGuardOptions = {}) {
     .eq("id", user.id)
     .single<AdminProfile>();
 
-  if (profileError || profile?.role !== "admin") {
+  if (profileError || !profile || !adminRoles.has(profile.role)) {
     redirect("/admin/login?error=unauthorized");
+  }
+
+  if (options.requireOwner && profile.role !== "owner") {
+    redirect("/admin");
   }
 
   const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
@@ -47,5 +54,5 @@ export async function requireAdmin(options: AdminGuardOptions = {}) {
     }
   }
 
-  return { supabase, user, profile, aal };
+  return { supabase, user, profile, aal, isOwner: profile.role === "owner" };
 }

@@ -30,7 +30,7 @@ Orden de prioridad:
 
 | Fase | Spec | Estado |
 | --- | --- | --- |
-| 0 | [000 – Limpieza y simplificación](specs/000-limpieza.md) | En curso |
+| 0 | [000 – Limpieza y simplificación](specs/000-limpieza.md) | Hecha (faltan fotos y tests) |
 | 1 | [001 – Clientes](specs/001-clientes.md) | Propuesta |
 | 1 | [002 – Sesiones y terapias elegidas](specs/002-sesiones.md) | Propuesta |
 | 2 | [003 – Admin simple (navegación y pantalla de inicio)](specs/003-admin-simple.md) | Propuesta |
