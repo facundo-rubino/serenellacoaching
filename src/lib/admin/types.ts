@@ -115,3 +115,31 @@ export type AdminAdvancedData = {
   pages: AdminPageRow[];
   mediaAssets: AdminMediaAssetRow[];
 };
+
+export const referralSources = [
+  { value: "recomendacion", label: "Recomendación" },
+  { value: "instagram", label: "Instagram" },
+  { value: "facebook", label: "Facebook" },
+  { value: "google", label: "Google" },
+  { value: "sitio_web", label: "Sitio web" },
+  { value: "otro", label: "Otro" },
+] as const;
+
+export type ClientRow = {
+  id: string;
+  full_name: string;
+  phone: string | null;
+  email: string | null;
+  city: string | null;
+  area: string | null;
+  country: string | null;
+  birth_date: string | null;
+  referral_source: (typeof referralSources)[number]["value"] | null;
+  referred_by: string | null;
+  first_visit_date: string | null;
+  consent_at: string | null;
+  notes: string | null;
+  archived_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
