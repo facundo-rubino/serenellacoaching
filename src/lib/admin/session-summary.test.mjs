@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { formatSince, summarizeSessions } from "./session-summary.ts";
+import { formatSince, summarizeSessions, topCounts } from "./session-summary.ts";
 
 test("resume primera/última visita, cantidad y terapia más frecuente", () => {
   const summary = summarizeSessions([
@@ -35,4 +35,11 @@ test("empate: gana la terapia más reciente", () => {
 test("formatSince", () => {
   assert.equal(formatSince(null), "sin sesiones");
   assert.equal(formatSince(21), "hace 3 semanas");
+});
+
+test("topCounts ordena por cantidad y ignora vacíos", () => {
+  assert.deepEqual(topCounts(["Reiki", "Masaje", "Reiki", null, " ", "Yoga"], 2), [
+    { label: "Reiki", count: 2 },
+    { label: "Masaje", count: 1 },
+  ]);
 });

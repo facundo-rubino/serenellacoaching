@@ -46,3 +46,15 @@ export function formatSince(days: number | null) {
   if (days < 365) return `hace ${Math.round(days / 30)} meses`;
   return `hace ${Math.round(days / 365)} año${Math.round(days / 365) === 1 ? "" : "s"}`;
 }
+
+export function topCounts(values: (string | null | undefined)[], limit = 3) {
+  const counts = new Map<string, number>();
+  for (const value of values) {
+    const label = value?.trim();
+    if (label) counts.set(label, (counts.get(label) ?? 0) + 1);
+  }
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "es"))
+    .slice(0, limit)
+    .map(([label, count]) => ({ label, count }));
+}

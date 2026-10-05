@@ -90,7 +90,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
             action={deleteSessionAction}
             successMessage="Sesión eliminada."
             confirmation={{
-              title: "¿Eliminar esta sesión?",
+              title: `¿Eliminar la sesión de ${client.full_name} del ${new Date(`${session.session_date}T00:00:00`).toLocaleDateString("es-AR")}?`,
               description: "Se borra del historial y no se puede deshacer.",
               confirmLabel: "Eliminar",
             }}
@@ -114,7 +114,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
           archived
             ? undefined
             : {
-                title: "¿Archivar este cliente?",
+                title: `¿Archivar a ${client.full_name}?`,
                 description: "Deja de aparecer en la lista, pero no se pierde ningún dato ni su historial.",
                 confirmLabel: "Archivar",
               }

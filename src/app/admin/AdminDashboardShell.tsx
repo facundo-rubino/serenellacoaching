@@ -15,14 +15,18 @@ type AdminDashboardShellProps = {
 };
 
 const navigation = [
-  { href: "/admin", label: "Inicio", icon: "grid", ownerOnly: false },
+  { href: "/admin", label: "Inicio", icon: "home", ownerOnly: false },
   { href: "/admin/clientes", label: "Clientes", icon: "users", ownerOnly: false },
-  { href: "/admin/sitio", label: "Mi sitio", icon: "file", ownerOnly: false },
+  { href: "/admin/sesiones", label: "Sesiones", icon: "calendar", ownerOnly: false },
+  { href: "/admin/sitio", label: "Mi sitio", icon: "globe", ownerOnly: false },
   { href: "/admin/avanzado", label: "Avanzado", icon: "settings", ownerOnly: true },
 ] as const;
 
 function NavigationIcon({ name }: { name: (typeof navigation)[number]["icon"] }) {
   const paths = {
+    home: <><path d="M3 11 12 3l9 8" /><path d="M5 10v10h14V10M10 20v-6h4v6" /></>,
+    calendar: <><rect x="3" y="4" width="18" height="17" rx="2" /><path d="M3 9h18M8 2v4M16 2v4" /></>,
+    globe: <><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" /></>,
     grid: <><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></>,
     settings: <><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z" /></>,
     users: <><circle cx="9" cy="8" r="4" /><path d="M2 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1M16 4a4 4 0 0 1 0 8M22 21v-1a6 6 0 0 0-4-5.6" /></>,
@@ -35,6 +39,8 @@ function NavigationIcon({ name }: { name: (typeof navigation)[number]["icon"] })
 export function AdminDashboardShell({ children, email, displayName, signOutAction, isOwner }: AdminDashboardShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const isActive = (href: string) => (href === "/admin" ? pathname === href : pathname.startsWith(href));
+  const visibleNavigation = navigation.filter((item) => isOwner || !item.ownerOnly);
 
   useEffect(() => {
     document.body.style.overflow = sidebarOpen ? "hidden" : "";
@@ -67,10 +73,8 @@ export function AdminDashboardShell({ children, email, displayName, signOutActio
 
         <nav className={styles.sidebarNav}>
           <p>Menú</p>
-          {navigation
-            .filter((item) => isOwner || !item.ownerOnly)
-            .map((item) => {
-              const active = item.href === "/admin" ? pathname === item.href : pathname.startsWith(item.href);
+          {visibleNavigation.map((item) => {
+              const active = isActive(item.href);
               return (
                 <Link
                   key={item.href}
@@ -114,6 +118,21 @@ export function AdminDashboardShell({ children, email, displayName, signOutActio
           </Link>
         </header>
         <main className={styles.adminPage}>{children}</main>
+        <nav className={styles.bottomNav} aria-label="Navegación principal">
+          {visibleNavigation
+            .filter((item) => !item.ownerOnly)
+            .map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={isActive(item.href) ? styles.bottomNavActive : undefined}
+                aria-current={isActive(item.href) ? "page" : undefined}
+              >
+                <NavigationIcon name={item.icon} />
+                <span>{item.label}</span>
+              </Link>
+            ))}
+        </nav>
       </div>
     </div>
   );
