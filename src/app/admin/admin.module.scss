@@ -971,3 +971,120 @@
     transition: none;
   }
 }
+
+.bigActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.primaryAction {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: $color-accent;
+  color: #fff;
+  padding: 0 22px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.plainList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 8px;
+  list-style: none;
+
+  > li {
+    display: flex;
+    min-height: 56px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border: 1px solid $color-border;
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+
+  a:not(.secondaryButton) {
+    display: grid;
+    gap: 3px;
+    text-decoration: none;
+  }
+
+  small,
+  time {
+    color: $color-muted;
+    font-size: 0.85rem;
+  }
+}
+
+.bottomNav {
+  display: none;
+}
+
+// Guía de estilo del admin: texto >= 16px y controles >= 44px.
+.authForm,
+.editorForm,
+.inlineForm {
+  input,
+  textarea,
+  select {
+    font-size: 1rem;
+  }
+}
+
+.secondaryButton,
+.dangerButton {
+  min-height: 44px;
+}
+
+@media (max-width: 900px) {
+  .mobileAdminHeader {
+    position: static;
+  }
+
+  .adminPage {
+    padding-bottom: 96px;
+  }
+
+  .bottomNav {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 70;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    border-top: 1px solid $color-border;
+    background: $color-surface;
+    padding-bottom: env(safe-area-inset-bottom);
+
+    a {
+      display: grid;
+      min-height: 64px;
+      place-items: center;
+      align-content: center;
+      gap: 2px;
+      color: $color-muted;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+    }
+  }
+
+  .bottomNavActive {
+    color: $color-accent;
+  }
+}

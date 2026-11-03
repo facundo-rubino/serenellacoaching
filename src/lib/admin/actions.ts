@@ -465,3 +465,123 @@ export async function runAdminAction(action: () => Promise<void>): Promise<Actio
     return { error: safeMessage(error) };
   }
 }
+
+const referralSourceSchema = z
+  .enum(["recomendacion", "instagram", "facebook", "google", "sitio_web", "otro"])
+  .nullable();
+const optionalDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable();
+
+function clientPayload(formData: FormData) {
+  const email = nullableFormString(formData, "email");
+
+  return {
+    full_name: z.string().min(1, "Escribí el nombre.").parse(formString(formData, "full_name")),
+    phone: nullableFormString(formData, "phone"),
+    email: z.string().email("El email no parece válido.").nullable().parse(email),
+    city: nullableFormString(formData, "city"),
+    area: nullableFormString(formData, "area"),
+    birth_date: optionalDateSchema.parse(nullableFormString(formData, "birth_date")),
+    referral_source: referralSourceSchema.parse(nullableFormString(formData, "referral_source")),
+    referred_by: optionalUuid(formData, "referred_by"),
+    first_visit_date: optionalDateSchema.parse(nullableFormString(formData, "first_visit_date")),
+    notes: nullableFormString(formData, "notes"),
+  };
+}
+
+export async function createClientAction(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const consent = formData.get("consent") === "on";
+  const { data, error } = await supabase
+    .from("clients")
+    .insert({ ...clientPayload(formData), consent_at: consent ? new Date().toISOString() : null })
+    .select("id")
+    .single<{ id: string }>();
+  if (error) throw error;
+  revalidatePath("/admin/clientes");
+  redirect(`/admin/clientes/${data.id}`);
+}
+
+export async function updateClientAction(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = z.string().uuid().parse(formString(formData, "id"));
+  const consent = formData.get("consent") === "on";
+  const { data: current, error: readError } = await supabase
+    .from("clients")
+    .select("consent_at")
+    .eq("id", id)
+    .single<{ consent_at: string | null }>();
+  if (readError) throw readError;
+
+  const consentAt = consent ? (current.consent_at ?? new Date().toISOString()) : null;
+  const { error } = await supabase
+    .from("clients")
+    .update({ ...clientPayload(formData), consent_at: consentAt })
+    .eq("id", id);
+  if (error) throw error;
+  revalidatePath("/admin/clientes");
+  revalidatePath(`/admin/clientes/${id}`);
+}
+
+export async function setClientArchivedAction(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = z.string().uuid().parse(formString(formData, "id"));
+  const archive = formString(formData, "archive") === "true";
+  const { error } = await supabase
+    .from("clients")
+    .update({ archived_at: archive ? new Date().toISOString() : null })
+    .eq("id", id);
+  if (error) throw error;
+  revalidatePath("/admin/clientes");
+  revalidatePath(`/admin/clientes/${id}`);
+}
+
+function sessionPayload(formData: FormData) {
+  const amount = nullableFormString(formData, "amount")?.replace(",", ".") ?? null;
+
+  return {
+    session_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Elegí la fecha.").parse(formString(formData, "session_date")),
+    modality: z.enum(["presencial", "online"]).parse(formString(formData, "modality") || "presencial"),
+    amount: z.coerce.number().min(0, "El monto no puede ser negativo.").nullable().parse(amount),
+    paid: formData.get("paid") === "on",
+    notes: nullableFormString(formData, "notes"),
+  };
+}
+
+export async function createSessionAction(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const clientId = z.string().uuid("Elegí un cliente.").parse(formString(formData, "client_id"));
+  const therapyId = optionalUuid(formData, "therapy_id");
+  let therapyLabel = nullableFormString(formData, "therapy_label");
+
+  if (therapyId) {
+    const { data: therapy, error: therapyError } = await supabase
+      .from("content_items")
+      .select("title")
+      .eq("id", therapyId)
+      .eq("type", "therapy")
+      .single<{ title: string }>();
+    if (therapyError) throw new Error("Esa terapia no existe.");
+    therapyLabel = therapy.title;
+  } else if (!therapyLabel) {
+    throw new Error("Elegí la terapia.");
+  }
+
+  const { error } = await supabase
+    .from("client_sessions")
+    .insert({ client_id: clientId, therapy_id: therapyId, therapy_label: therapyLabel, ...sessionPayload(formData) });
+  if (error) throw error;
+  revalidatePath("/admin/clientes", "layout");
+}
+
+export async function createSessionAndOpenClientAction(formData: FormData) {
+  await createSessionAction(formData);
+  redirect(`/admin/clientes/${formData.get("client_id")}`);
+}
+
+export async function deleteSessionAction(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = z.string().uuid().parse(formString(formData, "id"));
+  const { error } = await supabase.from("client_sessions").delete().eq("id", id);
+  if (error) throw error;
+  revalidatePath("/admin/clientes", "layout");
+}

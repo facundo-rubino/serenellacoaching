@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "test": "node --test src/lib/admin/session-summary.test.mjs scripts/import-clients.test.mjs",
     "typecheck": "tsc --noEmit",
     "check": "npm run lint && npm run typecheck",
     "env:check": "node scripts/validate-env.mjs",
